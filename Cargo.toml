@@ -1,0 +1,10 @@
+[package]
+name = "glrs-matrix"
+version = "0.1.0"
+authors = ["Toshiyuki Ogawa <toshi@oc-soft.net>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+readonly="0.1"
