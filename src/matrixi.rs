@@ -10,18 +10,20 @@ pub struct MatrixI {
 }
 
 // Matrix implementatin
-impl MatrixI  {
+impl MatrixI {
     /// create matrix instance to bind vector
-    pub(crate) fn bind_with_col_count_0(comp:Rc<RefCell<Vec<f64>>>, col_count: usize) ->Result<Self, MatrixError> {
-        
+    pub(crate) fn bind_with_col_count_0(
+        comp: Rc<RefCell<Vec<f64>>>,
+        col_count: usize,
+    ) -> Result<Self, MatrixError> {
         Ok(MatrixI {
             component: comp,
             col_count: col_count,
         })
     }
-    
+
     /// create matrix instance to bind vector
-    pub fn bind(comp:Rc<RefCell<Vec<f64>>>) ->Result<Self, MatrixError> {
+    pub fn bind(comp: Rc<RefCell<Vec<f64>>>) -> Result<Self, MatrixError> {
         let len = comp.borrow().len();
         if len == 0 {
             Err(MatrixError)
@@ -31,7 +33,10 @@ impl MatrixI  {
         }
     }
 
-    pub fn bind_with_col_count(comp:Rc<RefCell<Vec<f64>>>, col_count: usize) -> Result<Self, MatrixError> {
+    pub fn bind_with_col_count(
+        comp: Rc<RefCell<Vec<f64>>>,
+        col_count: usize,
+    ) -> Result<Self, MatrixError> {
         let comp_size = col_count.pow(2);
         {
             let mut comp = comp.borrow_mut();
@@ -46,7 +51,6 @@ impl MatrixI  {
     pub fn count(&self) -> usize {
         self.component.borrow().len()
     }
-
 
     /// get count of columns
     pub fn col_count(&self) -> usize {
@@ -73,27 +77,28 @@ impl MatrixI  {
     }
 
     /// multiply
-    pub fn multiply(&mut self, other: &MatrixI) -> Result<&MatrixI, MatrixError> {
+    pub fn multiply(
+        &mut self,
+        other: &MatrixI,
+    ) -> Result<&MatrixI, MatrixError> {
         if self.count() == other.count() {
             let mut tmp_comp = Vec::with_capacity(self.count());
             for ridx in 0..self.row_count() {
                 for cidx in 0..self.col_count() {
                     let mut cmp = 0.0;
                     for rcidx in 0..other.row_count() {
-                        cmp +=
-                            self.get_component(ridx, rcidx).unwrap()
+                        cmp += self.get_component(ridx, rcidx).unwrap()
                             * other.get_component(rcidx, cidx).unwrap();
                     }
                     tmp_comp.push(cmp);
                 }
             }
             self.component.borrow_mut().clone_from_slice(&tmp_comp[0..]);
-            Ok(self) 
+            Ok(self)
         } else {
             Err(MatrixError)
         }
     }
-
 
     /// copy field from other matrix
     pub fn copy(&mut self, other: &Self) -> Result<&Self, MatrixError> {
@@ -108,9 +113,12 @@ impl MatrixI  {
         }
     }
 
-
     /// get component
-    pub fn get_component(&self, row : usize, col: usize) -> Result<f64, MatrixError> {
+    pub fn get_component(
+        &self,
+        row: usize,
+        col: usize,
+    ) -> Result<f64, MatrixError> {
         let idx = self.col_count * row + col;
         if idx < self.count() {
             Ok(self.component.borrow()[idx])
@@ -120,7 +128,12 @@ impl MatrixI  {
     }
 
     /// set component
-    pub fn set_component(&mut self, row: usize, col: usize, val: f64) ->Option<MatrixError> {
+    pub fn set_component(
+        &mut self,
+        row: usize,
+        col: usize,
+        val: f64,
+    ) -> Option<MatrixError> {
         let idx = self.col_count * row + col;
         if idx < self.count() {
             let mut comp = self.component.borrow_mut();
@@ -132,15 +145,14 @@ impl MatrixI  {
     }
 }
 
-
 impl std::cmp::PartialEq for MatrixI {
     /// operator equals overloading
     fn eq(&self, other: &Self) -> bool {
         let mut result = self.count() == other.count();
         if result {
             for i in 0..self.count() {
-                result = self.component.borrow()[i]
-                    == other.component.borrow()[i];
+                result =
+                    self.component.borrow()[i] == other.component.borrow()[i];
                 if !result {
                     break;
                 }

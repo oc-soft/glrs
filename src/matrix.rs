@@ -1,17 +1,15 @@
-
 use crate::matrixi::MatrixI;
 use crate::MatrixError;
-use std::rc::Rc;
-use std::ops::Add;
 use std::cell::RefCell;
+use std::ops::Add;
+use std::rc::Rc;
 
 /// matrix instance
 
 pub struct Matrix {
     component: Rc<RefCell<Vec<f64>>>,
-    dim: usize
+    dim: usize,
 }
-
 
 impl Matrix {
     fn new_with_source_component(dim: usize, component: &Vec<f64>) -> Matrix {
@@ -20,7 +18,7 @@ impl Matrix {
         comp.clone_from_slice(&component[0..vec_count]);
         Matrix {
             component: Rc::new(RefCell::new(comp)),
-            dim: dim
+            dim: dim,
         }
     }
 
@@ -30,16 +28,15 @@ impl Matrix {
             let comp = Rc::new(RefCell::new(Vec::with_capacity(vec_count)));
 
             {
-                let mut matop = MatrixI::bind_with_col_count(
-                    comp.clone(), dim).unwrap();
+                let mut matop =
+                    MatrixI::bind_with_col_count(comp.clone(), dim).unwrap();
                 for i in 0..matop.row_count() {
                     matop.set_component(i, i, 1.0);
                 }
-                
             }
             let matrix = Matrix {
                 component: comp,
-                dim: dim
+                dim: dim,
             };
             Ok(Rc::new(matrix))
         } else {
@@ -55,24 +52,22 @@ impl Clone for Matrix {
     }
 }
 
-
 impl Add for Matrix {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
-         
         let res = self.clone();
         {
-            
-            let mut mat1 = MatrixI::bind_with_col_count_0(
-                res.component.clone(), res.dim).unwrap();
-            let mat2 = MatrixI::bind_with_col_count_0(
-                other.component, other.dim).unwrap();
+            let mut mat1 =
+                MatrixI::bind_with_col_count_0(res.component.clone(), res.dim)
+                    .unwrap();
+            let mat2 =
+                MatrixI::bind_with_col_count_0(other.component, other.dim)
+                    .unwrap();
             mat1.add(&mat2).unwrap();
         }
         res
     }
 }
-
 
 // vi: se ts=4 sw=4 et:
