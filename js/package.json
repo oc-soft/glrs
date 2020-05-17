@@ -1,0 +1,21 @@
+{
+  "name": "glrs-test",
+  "version": "0.1.0",
+  "description": "web gl gemoetric procedure collection.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "gl",
+    "webgl",
+    "3d",
+    "matrix",
+    "vector"
+  ],
+  "author": "Toshiyuki Ogawa",
+  "license": "MIT",
+  "devDependencies": {
+    "glrs": "file:../pkg"
+  }
+}

@@ -1,4 +1,4 @@
-use crate::MatrixError;
+use crate::matrix::MatrixError;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -133,14 +133,50 @@ impl MatrixI {
         row: usize,
         col: usize,
         val: f64,
-    ) -> Option<MatrixError> {
+    ) -> Result<(), MatrixError> {
         let idx = self.col_count * row + col;
         if idx < self.count() {
             let mut comp = self.component.borrow_mut();
             comp[idx] = val;
-            None
+            Ok(())
         } else {
-            Some(MatrixError)
+            Err(MatrixError)
+        }
+    }
+}
+
+impl MatrixI {
+    /// apply matrix left sidei
+    pub fn apply_l(&self, v: Vec<f64>) -> Result<Vec<f64>, MatrixError> {
+        if v.len() >= self.col_count() {
+            let mut result = Vec::with_capacity(self.col_count());
+            for cidx in 0..self.col_count() {
+                let mut val = 0.0;
+                for ridx in 0..self.row_count() {
+                    val += v[ridx] * self.get_component(ridx, cidx).unwrap();
+                }
+                result.push(val)
+            }
+            Ok(result)
+        } else {
+            Err(MatrixError)
+        }
+    }
+
+    /// apply matrix left sidei
+    pub fn apply_r(&self, v: Vec<f64>) -> Result<Vec<f64>, MatrixError> {
+        if v.len() >= self.row_count() {
+            let mut result = Vec::with_capacity(self.row_count());
+            for ridx in 0..self.row_count() {
+                let mut val = 0.0;
+                for cidx in 0..self.col_count() {
+                    val += self.get_component(ridx, cidx).unwrap() * v[cidx];
+                }
+                result.push(val)
+            }
+            Ok(result)
+        } else {
+            Err(MatrixError)
         }
     }
 }
