@@ -2,7 +2,6 @@ use std::rc::Rc;
 use js_sys::Float64Array;
 use js_sys::Float32Array;
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::Clamped;
 
 /// create vector
 pub fn vector_create_from_vec(
@@ -24,7 +23,7 @@ pub fn vector_convert_to_vec64_from_32(
 /// convert Float64Array from Vec<f64>
 pub fn vector_convert_to_vec64_from_64(
     components: &Vec<f64>) -> Float64Array {
-    let mut result  = Float64Array::new_with_length(components.len() as u32);
+    let result  = Float64Array::new_with_length(components.len() as u32);
     for i in 0..components.len() {
         result.set_index(i as u32, components[i]);
     }
@@ -34,7 +33,7 @@ pub fn vector_convert_to_vec64_from_64(
 /// convert Float64Array from Vec<f64>
 pub fn vector_convert_to_vec32_from_64(
     components: &Vec<f64>) -> Float32Array {
-    let mut result  = Float32Array::new_with_length(components.len() as u32);
+    let result  = Float32Array::new_with_length(components.len() as u32);
     for i in 0..components.len() {
         result.set_index(i as u32, components[i] as f32);
     }

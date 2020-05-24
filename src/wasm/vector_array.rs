@@ -1,9 +1,7 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::Clamped;
 use js_sys::Float64Array;
-use js_sys::Float32Array;
 use super::vector::*;
 
 /// create vectors

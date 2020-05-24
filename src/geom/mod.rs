@@ -1,5 +1,4 @@
 pub(crate) use error::GeomError;
-use crate::Matrix;
 
 mod error;
 
