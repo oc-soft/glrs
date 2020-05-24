@@ -2,6 +2,8 @@ use std::rc::Rc;
 use std::cell::RefCell;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::Clamped;
+use js_sys::Float64Array;
+use js_sys::Float32Array;
 use super::vector::*;
 
 /// create vectors
@@ -114,7 +116,7 @@ pub fn vector_array_add_0(
 #[wasm_bindgen]
 pub fn vector_array_add_1(
     va: *const RefCell<Vec<Vec<f64>>>,
-    v: Clamped<Vec<f64>>,
+    v: Float64Array,
 ) -> bool {
     if std::ptr::null() != va {
         let vec_raw = vector_create(v);

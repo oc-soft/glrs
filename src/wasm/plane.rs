@@ -4,6 +4,8 @@ use std::collections::BTreeMap;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::Clamped;
 use wasm_bindgen::JsValue;
+use js_sys::Float64Array;
+use js_sys::Float32Array;
 use crate::Plane;
 use crate::Distance;
 use super::distance_indices::*;
@@ -28,7 +30,7 @@ pub fn plane_create_0(n: *const Vec<f64>, c: *const Vec<f64>)
 
 /// create plane instance
 #[wasm_bindgen]
-pub fn plane_create(n: Clamped<Vec<f64>>, c: Clamped<Vec<f64>>)
+pub fn plane_create(n: Float64Array, c: Float64Array)
     -> *const Plane {
     let n_vec = vector_create(n); 
     let c_vec = vector_create(c);
@@ -105,7 +107,7 @@ pub fn plane_distance_0(
 #[wasm_bindgen]
 pub fn plane_distance(
     p: *const Plane,
-    v: Clamped<Vec<f64>>) -> Option<f64> {
+    v: Float64Array) -> Option<f64> {
     if std::ptr::null() != p {
         let vec = vector_create(v);  
         let result = plane_distance_0(p, vec);

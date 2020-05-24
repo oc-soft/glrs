@@ -75,6 +75,20 @@ impl MatrixI {
             Ok(self)
         }
     }
+    /// subtract matrix
+    pub fn sub(&mut self, matrix: &MatrixI) -> Result<&MatrixI, MatrixError> {
+        if self.count() != matrix.count() {
+            Err(MatrixError)
+        } else {
+            let mut comp0 = self.component.borrow_mut();
+            let comp1 = matrix.component.borrow();
+            for i in 0..comp0.len() {
+                comp0[i] -= comp1[i];
+            }
+            Ok(self)
+        }
+    }
+
 
     /// multiply
     pub fn multiply(
@@ -147,7 +161,7 @@ impl MatrixI {
 
 impl MatrixI {
     /// apply matrix left sidei
-    pub fn apply_l(&self, v: Vec<f64>) -> Result<Vec<f64>, MatrixError> {
+    pub fn apply_l(&self, v: &Vec<f64>) -> Result<Vec<f64>, MatrixError> {
         if v.len() >= self.col_count() {
             let mut result = Vec::with_capacity(self.col_count());
             for cidx in 0..self.col_count() {
@@ -164,7 +178,7 @@ impl MatrixI {
     }
 
     /// apply matrix left sidei
-    pub fn apply_r(&self, v: Vec<f64>) -> Result<Vec<f64>, MatrixError> {
+    pub fn apply_r(&self, v: &Vec<f64>) -> Result<Vec<f64>, MatrixError> {
         if v.len() >= self.row_count() {
             let mut result = Vec::with_capacity(self.row_count());
             for ridx in 0..self.row_count() {

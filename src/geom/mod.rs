@@ -1,4 +1,5 @@
 pub(crate) use error::GeomError;
+use crate::Matrix;
 
 mod error;
 
@@ -72,5 +73,6 @@ pub fn minus(v1: &Vec<f64>, v2: &Vec<f64>) -> Result<Vec<f64>, GeomError> {
         Err(GeomError)
     }
 }
+
 
 // vi: se ts=4 sw=4 et:
