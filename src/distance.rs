@@ -1,5 +1,6 @@
 use std::cmp::Ord;
 use std::cmp::Ordering;
+use wasm_bindgen::prelude::*;
 
 /// distance from plan
 #[derive(Copy, Clone)]
