@@ -528,14 +528,14 @@ impl Matrix {
         
         if aspect != 0.0 && aspect != -0.0
             && nf != 0.0 || nf != -0.0 {
-            let f = 1.0 / fovy.tan();  
+            let f = 1.0 / (fovy / 2.0).tan();  
             let mut result = Matrix::new(4).unwrap();
             result.set_component(0, 0, f / aspect).unwrap(); 
             result.set_component(1, 1, f).unwrap(); 
-            result.set_component(2, 2, -(z_far + z_near) / nf).unwrap(); 
+            result.set_component(2, 2, (z_far + z_near) / nf).unwrap(); 
             result.set_component(3, 3, 0.0).unwrap();
             
-            result.set_component(2, 3, (-2.0 * z_far * z_near) / nf).unwrap(); 
+            result.set_component(2, 3, (2.0 * z_far * z_near) / nf).unwrap(); 
             result.set_component(3, 2, -1.0).unwrap();
 
             Ok(result) 
