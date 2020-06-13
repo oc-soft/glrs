@@ -5,6 +5,7 @@ use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::BTreeMap;
 use std::rc::Rc;
+use ordered_float::OrderedFloat;
 
 /// I represent plane with normal vector and the point on the plane
 pub struct Plane {
@@ -55,8 +56,20 @@ impl Plane {
         }
     }
 
+    /// project a point to this plane
+    pub fn project(&self, p: &Vec<f64>) -> Result<Vec<f64>, GeomError> {
+         match self.distance(p) {
+            Ok(dis) => {
+                let translate = geom::scale(-dis, &self.n);
+                let result = geom::plus(&translate, &p).unwrap();
+                Ok(result)
+            },
+            Err(err) => Err(err)
+        }
+    }
+
     /// sort point from this plane
-    pub fn sort_points(
+    pub fn sort_points_1(
         &self,
         points: &Vec<Vec<f64>>,
     ) -> BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
@@ -73,6 +86,34 @@ impl Plane {
                         vec.push(i);
                         result.insert(
                             Distance::new(&distance),
+                            Rc::new(RefCell::new(vec)),
+                        );
+                    }
+                },
+                Err(_) => (),
+            }
+        }
+        result
+    }
+
+    /// sort point from this plane
+    pub fn sort_points_0(
+        &self,
+        points: &Vec<Vec<f64>>,
+    ) -> BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> {
+        let mut result: BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> =
+            BTreeMap::new();
+
+        for i in 0..points.len() {
+            let pt = &points[i];
+            match self.distance(&pt) {
+                Ok(distance) => match result.get(&OrderedFloat(distance)) {
+                    Some(vec) => vec.borrow_mut().push(i),
+                    None => {
+                        let mut vec = Vec::new();
+                        vec.push(i);
+                        result.insert(
+                            OrderedFloat(distance),
                             Rc::new(RefCell::new(vec)),
                         );
                     }

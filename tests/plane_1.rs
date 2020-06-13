@@ -32,7 +32,7 @@ fn sort_0() {
     points.push(vec![-3.0, 4.0, -2.0]);
     points.push(vec![1.0, 1.0, 2.0]);
 
-    let sorted_indices = p.sort_points(&points);
+    let sorted_indices = p.sort_points_1(&points);
 
     {
         let values = sorted_indices.values().next().unwrap();

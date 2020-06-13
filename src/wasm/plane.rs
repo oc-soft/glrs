@@ -1,12 +1,14 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
+use ordered_float::OrderedFloat;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsValue;
 use js_sys::Float64Array;
 use crate::Plane;
 use crate::Distance;
 use super::distance_indices::*;
+use super::float_indices::*;
 use super::vector::*;
 use super::vector_array::*;
 
@@ -116,17 +118,108 @@ pub fn plane_distance(
     }
 }
 
+/// project point to plane
+#[wasm_bindgen]
+pub fn plane_project_0(
+    p: *const Plane,
+    v: *const Vec<f64>) -> Option<Vec<f64>> {
+    if std::ptr::null() != p && std::ptr::null() != v {
+        unsafe {
+            match (*p).project(&(*v)) {
+                Ok(proj_pt) => Some(proj_pt),
+                Err(_) => None
+            }
+        }
+    } else {
+        None
+    }
+}
 
+
+/// project the point on plane
+#[wasm_bindgen]
+pub fn plane_project(
+    p: *const Plane,
+    v: Float64Array) -> Option<Float64Array> {
+    if std::ptr::null() != p {
+        let vec = vector_create(v);  
+        let res = plane_project_0(p, vec);
+        vector_release(vec);
+        match res {
+            Some(vec_res) => {
+                Some(vector_convert_to_vec64_from_64(&vec_res))
+            },
+            _ => None
+        }
+    } else {
+        None
+    }
+}
+
+/// sort points
+#[wasm_bindgen]
+pub fn plane_sort_points_0_i(
+    p: *const Plane,
+    va: *const RefCell<Vec<Vec<f64>>>)
+    -> *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> {
+    if std::ptr::null() != p && std::ptr::null() != va {
+        unsafe {
+            let sorted_indices = (*p).sort_points_0(&(*va).borrow());
+            float_indices_create_0(sorted_indices)
+        }
+    } else {
+        std::ptr::null()
+    }
+}
 
 /// sort points
 #[wasm_bindgen]
 pub fn plane_sort_points_0(
     p: *const Plane,
-    va: *const RefCell<Vec<Vec<f64>>>,
-) -> *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
+    point_container: JsValue)
+    -> *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> {
+    if std::ptr::null() != p {
+        if point_container.is_object() {
+            let array_js = js_sys::Array::from(&point_container);
+            let vec_array = vector_array_create();
+
+            for i in 0..array_js.length() {
+                let elem_js = array_js.get(i);
+                if elem_js.is_object() {
+                    let va_js = js_sys::Array::from(&elem_js);
+                    let mut vec = Vec::new();
+                    for j in 0..va_js.length() {
+                        match va_js.get(j).as_f64() {
+                            Some(val) => vec.push(val),
+                            None => break
+                        }
+                    }
+                    vector_array_add_0(vec_array, &vec);
+                } else {
+                    vector_array_add_0(vec_array, &Vec::new());  
+                }
+            }
+            let result = plane_sort_points_0_i(p, vec_array);
+            vector_array_release(vec_array);
+            result
+        } else {
+            std::ptr::null()
+        }
+    } else {
+        std::ptr::null()
+    }
+}
+
+
+/// sort points
+#[wasm_bindgen]
+pub fn plane_sort_points_1_i(
+    p: *const Plane,
+    va: *const RefCell<Vec<Vec<f64>>>)
+    -> *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
     if std::ptr::null() != p && std::ptr::null() != va {
         unsafe {
-            let sorted_indices = (*p).sort_points(&(*va).borrow());
+            let sorted_indices = (*p).sort_points_1(&(*va).borrow());
             distance_indices_create_0(sorted_indices)
         }
     } else {
@@ -136,7 +229,7 @@ pub fn plane_sort_points_0(
 
 /// sort points
 #[wasm_bindgen]
-pub fn plane_sort_points(
+pub fn plane_sort_points_1(
     p: *const Plane,
     point_container: JsValue)
     -> *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
@@ -161,7 +254,7 @@ pub fn plane_sort_points(
                     vector_array_add_0(vec_array, &Vec::new());  
                 }
             }
-            let result = plane_sort_points_0(p, vec_array);
+            let result = plane_sort_points_1_i(p, vec_array);
             vector_array_release(vec_array);
             result
         } else {

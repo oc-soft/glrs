@@ -10,6 +10,7 @@ edition = "2018"
 readonly="0.1"
 wasm-bindgen = { git = "https://github.com/toshiyuki-rs/wasm-bindgen.git" }
 js-sys = { git = "https://github.com/toshiyuki-rs/wasm-bindgen.git"  }
+ordered-float = "1.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

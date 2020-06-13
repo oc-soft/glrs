@@ -57,7 +57,7 @@ class Plane {
       [ 20, 100.0, 5]
     ];
 
-    const di = glrs.plane_sort_points(p, vecs);
+    const di = glrs.plane_sort_points_1(p, vecs);
     const distances = glrs.distance_indices_get_distances(di);
     assert.equal(3, glrs.distances_size(distances));
     const expectedIdxs = [
@@ -98,7 +98,7 @@ class Plane {
       [ 20, 100.0, 5]
     ];
 
-    const di = glrs.plane_sort_points(p, vecs);
+    const di = glrs.plane_sort_points_1(p, vecs);
     const distances = glrs.distance_indices_get_distances(di);
     assert.equal(3, glrs.distances_size(distances));
     const expectedIdxs = [
@@ -140,7 +140,7 @@ class Plane {
       [ 20, 100.0, 5]
     ];
 
-    const di = glrs.plane_sort_points(p, vecs);
+    const di = glrs.plane_sort_points_1(p, vecs);
     const distances = glrs.distance_indices_get_distances(di);
     assert.equal(2, glrs.distances_size(distances));
     const expectedIdxs = [

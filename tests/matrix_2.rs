@@ -31,7 +31,8 @@ fn cross_product_0() {
 #[test]
 fn rotation_0() {
 
-    let rot_mat = Matrix::new_with_rotate(120_f64, 1f64, 1f64, 1f64).unwrap();
+    let mut rot_mat = Matrix::new(3).unwrap();
+    rot_mat.rotate_mut(120_f64, 1f64, 1f64, 1f64).unwrap();
 
     let x_axis = vec![1f64, 0f64, 0f64];
     let y_axis = vec![0f64, 1f64, 0f64];    
@@ -57,8 +58,8 @@ fn rotation_0() {
 
 #[test]
 fn rotation_1() {
-    let mut rot_mat = Matrix::new_with_rotate(
-        120_f64, 1f64, 1f64, 1f64).unwrap();
+    let mut rot_mat = Matrix::new(3).unwrap();
+    rot_mat.rotate_mut(120_f64, 1f64, 1f64, 1f64).unwrap();
     rot_mat.rotate_mut(120_f64, 1f64, 1f64, 1f64).unwrap();
 
     let x_axis = vec![1f64, 0f64, 0f64];
