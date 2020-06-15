@@ -38,7 +38,22 @@ impl Plane {
             Err(GeomError)
         }
     }
-
+    /// create line
+    pub fn create_with_2d(p1: &Vec<f64>, p2: &Vec<f64>)
+        -> Result<Plane, GeomError> {
+        if p1.len() > 1 && p2.len() > 1 {
+            match geom::minus(p2, p1) {
+                Ok(v) => {
+                    let v2d = vec!(v[0], v[1]);
+                    Self::create(&vec!(- v2d[1], v2d[0]), p1) 
+                },
+                _ => Err(GeomError)
+            }
+        } else {
+            Err(GeomError)    
+        }
+    }
+ 
     /// get dimension
     pub fn get_dimension(&self) -> usize {
         self.n.len()

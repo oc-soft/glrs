@@ -12,6 +12,15 @@ fn instantiate_1() {
 }
 
 #[test]
+fn instantiage_2() {
+    let instance = Plane::create_with_2d(
+        &vec!(0.0, 1.0, 2.0), &vec!(1.0, 0.0, 3.0, 4.0)).unwrap();
+    let diff = instance.distance(&vec!(0.0, 0.0, 0.0)).unwrap().abs() 
+        - 2f64.sqrt();
+    assert!(diff < 0.00001)
+}
+
+#[test]
 fn distance_0() {
     let p = Plane::create(&vec![0.0, 3.0], &vec![0.0, 3.0]).unwrap();
 
@@ -31,5 +40,6 @@ fn distance_2() {
     let dis = p.distance(&vec![0.0, 0.0, 1.0]).unwrap();
     assert!(dis == 1.0_f64);
 }
+
 
 // vi: se ts=4 sw=4 et:

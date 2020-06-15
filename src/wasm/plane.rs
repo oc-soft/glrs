@@ -27,6 +27,21 @@ pub fn plane_create_0(n: *const Vec<f64>, c: *const Vec<f64>)
         std::ptr::null()
     }
 }
+#[wasm_bindgen]
+pub fn plane_create_with_2d_0(p1: *const Vec<f64>, p2: *const Vec<f64>)
+    -> *const Plane {
+    if std::ptr::null() != p1 && std::ptr::null() != p2 {
+        unsafe {
+            match Plane::create_with_2d(&*p1, &*p2) {
+                Ok(p) => Rc::into_raw(Rc::new(p)),
+                Err(_) => std::ptr::null(),
+            }
+        }
+    } else {
+        std::ptr::null()
+    }
+}
+
 
 /// create plane instance
 #[wasm_bindgen]
@@ -40,6 +55,17 @@ pub fn plane_create(n: Float64Array, c: Float64Array)
     result
 }
 
+/// create plane instance
+#[wasm_bindgen]
+pub fn plane_create_with_2d(p1: Float64Array, p2: Float64Array)
+    -> *const Plane {
+    let p1_vec = vector_create(p1); 
+    let p2_vec = vector_create(p2);
+    let result = plane_create_with_2d_0(p1_vec, p2_vec);
+    vector_release(p1_vec);
+    vector_release(p2_vec);
+    result
+}
 /// increment reference count
 #[wasm_bindgen]
 pub fn plane_retain(p: *const Plane) -> usize {
