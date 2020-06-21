@@ -10,6 +10,17 @@ pub fn vector_create_from_vec(
     Rc::into_raw(result)
 }
 
+/// create vector
+pub fn vector_create_from_vec_ref(
+    v: &Vec<f64>) -> *const Vec<f64> {
+    let mut vec = Vec::with_capacity(v.len());
+    for i in 0..v.len() {
+        vec.push(v[i]);
+    }
+    vector_create_from_vec(vec)
+}
+
+
 /// convert Vec<f64> from Float32Array
 pub fn vector_convert_to_vec64_from_32(
     components: Float32Array) -> Vec<f64> {
@@ -21,7 +32,7 @@ pub fn vector_convert_to_vec64_from_32(
 }
 
 /// convert Float64Array from Vec<f64>
-pub fn vector_convert_to_vec64_from_64(
+pub fn vector_convert_to_array64_from_64(
     components: &Vec<f64>) -> Float64Array {
     let result  = Float64Array::new_with_length(components.len() as u32);
     for i in 0..components.len() {
@@ -31,7 +42,7 @@ pub fn vector_convert_to_vec64_from_64(
 }
 
 /// convert Float64Array from Vec<f64>
-pub fn vector_convert_to_vec32_from_64(
+pub fn vector_convert_to_array32_from_64(
     components: &Vec<f64>) -> Float32Array {
     let result  = Float32Array::new_with_length(components.len() as u32);
     for i in 0..components.len() {

@@ -9,6 +9,8 @@ pub use distance::*;
 pub use float_vec::*;
 pub use float_indices::*;
 pub use float::*;
+pub use segment::*;
+pub use geom::*;
 
 mod vector;
 mod vector_array;
@@ -20,6 +22,8 @@ mod distance;
 mod float_vec;
 mod float;
 mod float_indices;
+mod segment;
+mod geom;
 
 
 #[wasm_bindgen]

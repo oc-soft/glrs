@@ -1,5 +1,8 @@
 pub(crate) use error::GeomError;
 
+pub use d2::D2;
+
+mod d2;
 mod error;
 
 /// calculat length of vector

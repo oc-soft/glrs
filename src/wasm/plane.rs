@@ -173,7 +173,7 @@ pub fn plane_project(
         vector_release(vec);
         match res {
             Some(vec_res) => {
-                Some(vector_convert_to_vec64_from_64(&vec_res))
+                Some(vector_convert_to_array64_from_64(&vec_res))
             },
             _ => None
         }

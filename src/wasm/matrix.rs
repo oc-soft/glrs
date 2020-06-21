@@ -311,7 +311,7 @@ pub fn matrix_apply_l_64(
         unsafe {
             match (*mat).borrow().apply_l(&vec) {
                 Ok(vec_res) => { 
-                    Some(super::vector::vector_convert_to_vec64_from_64(
+                    Some(super::vector::vector_convert_to_array64_from_64(
                         &vec_res))
                 },
                 Err(_) => None
@@ -333,7 +333,7 @@ pub fn matrix_apply_l_32(
         unsafe {
             match (*mat).borrow().apply_l(&vec) {
                 Ok(vec_res) => { 
-                    Some(super::vector::vector_convert_to_vec32_from_64(
+                    Some(super::vector::vector_convert_to_array32_from_64(
                         &vec_res))
                 },
                 Err(_) => None
@@ -355,7 +355,7 @@ pub fn matrix_apply_r_64(
         unsafe {
             match (*mat).borrow().apply_r(&vec) {
                 Ok(vec_res) => { 
-                    Some(super::vector::vector_convert_to_vec64_from_64(
+                    Some(super::vector::vector_convert_to_array64_from_64(
                         &vec_res))
                 },
                 Err(_) => None
@@ -377,7 +377,7 @@ pub fn matrix_apply_r_32(
         unsafe {
             match (*mat).borrow().apply_r(&vec) {
                 Ok(vec_res) => { 
-                    Some(super::vector::vector_convert_to_vec32_from_64(
+                    Some(super::vector::vector_convert_to_array32_from_64(
                         &vec_res))
                 },
                 Err(_) => None
