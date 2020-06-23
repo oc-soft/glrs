@@ -365,7 +365,7 @@ pub fn segment_cross_point_parameter_2d_11(
 /// calculate cross point parameter as line 2d
 /// you will get none if cross point paremeter is out of segment range.
 #[wasm_bindgen]
-pub fn segment_cross_point_2d_parameter_exact_00(
+pub fn segment_cross_point_parameter_2d_exact_00(
     seg_1: *const Segment, 
     seg_2: *const Segment,
     tolerance: f64)
@@ -374,7 +374,7 @@ pub fn segment_cross_point_2d_parameter_exact_00(
         let param_ref;
         unsafe {
             param_ref =
-                (*seg_1).cross_point_2d_parameter_exact_0(&*seg_2, tolerance);
+                (*seg_1).cross_point_parameter_2d_exact_0(&*seg_2, tolerance);
         }
         if let Some(param) = param_ref {
             vector_create_from_vec(vec!(param[0], param[1]))
@@ -389,12 +389,12 @@ pub fn segment_cross_point_2d_parameter_exact_00(
 /// calculate cross point parameter as line 2d
 /// you will get none if cross point paremeter is out of segment range.
 #[wasm_bindgen]
-pub fn segment_cross_point_2d_parameter_exact_01(
+pub fn segment_cross_point_parameter_2d_exact_01(
     seg_1: *const Segment, 
     seg_2: *const Segment,
     tolerance: f64)
     -> Option<Float64Array> {
-    let vec = segment_cross_point_2d_parameter_exact_00(
+    let vec = segment_cross_point_parameter_2d_exact_00(
         seg_1, seg_2, tolerance);
     if vec != std::ptr::null() {
         let result = vector_get_components(vec);
@@ -408,14 +408,14 @@ pub fn segment_cross_point_2d_parameter_exact_01(
 /// calculate cross point parameter as line 2d
 /// you will get none if cross point paremeter is out of segment range.
 #[wasm_bindgen]
-pub fn segment_cross_point_2d_parameter_exact_10(
+pub fn segment_cross_point_parameter_2d_exact_10(
     seg_1: *const Segment,
     seg_2: *const Segment) -> *const Vec<f64> {
 
     if seg_1 != std::ptr::null() && seg_2 != std::ptr::null() {
         let param_ref;
         unsafe {
-            param_ref = (*seg_1).cross_point_2d_parameter_exact(&*seg_2);
+            param_ref = (*seg_1).cross_point_parameter_2d_exact(&*seg_2);
         }
         if let Some(param) = param_ref {
             vector_create_from_vec(vec!(param[0], param[1]))
@@ -430,11 +430,11 @@ pub fn segment_cross_point_2d_parameter_exact_10(
 /// calculate cross point parameter as line 2d
 /// you will get none if cross point paremeter is out of segment range.
 #[wasm_bindgen]
-pub fn segment_cross_point_2d_parameter_exact_11(
+pub fn segment_cross_point_parameter_2d_exact_11(
     seg_1: *const Segment,
     seg_2: *const Segment) -> Option<Float64Array> {
 
-    let vec = segment_cross_point_2d_parameter_exact_10(seg_1, seg_2);
+    let vec = segment_cross_point_parameter_2d_exact_10(seg_1, seg_2);
     if vec != std::ptr::null() {
         let result = vector_get_components(vec);
         vector_release(vec);

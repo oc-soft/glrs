@@ -199,7 +199,7 @@ impl Segment {
 
     /// calculate cross point parameter as line 2d
     /// you will get none if cross point paremeter is out of segment range.
-    pub fn cross_point_2d_parameter_exact_0(
+    pub fn cross_point_parameter_2d_exact_0(
         &self, other: &Self, tolerance: f64)
         -> Option<[f64;2]> {
         match self.cross_point_parameter_2d_0(other, tolerance) {
@@ -220,10 +220,10 @@ impl Segment {
 
     /// calculate cross point parameter as line 2d
     /// you will get none if cross point paremeter is out of segment range.
-    pub fn cross_point_2d_parameter_exact(
+    pub fn cross_point_parameter_2d_exact(
         &self, other: &Self)
         -> Option<[f64;2]> {
-        self.cross_point_2d_parameter_exact_0(other, 0.0)
+        self.cross_point_parameter_2d_exact_0(other, 0.0)
     }
 
 }
