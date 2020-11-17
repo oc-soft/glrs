@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub use distance::Distance;
 pub use matrix::Matrix;
 pub use matrixi::MatrixI;

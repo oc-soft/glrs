@@ -16,7 +16,7 @@ use super::vector_array::*;
 #[wasm_bindgen]
 pub fn plane_create_0(n: *const Vec<f64>, c: *const Vec<f64>)
     -> *const Plane {
-    if std::ptr::null() != n && std::ptr::null() != c {
+    if !n.is_null() && !c.is_null() {
         unsafe {
             match Plane::create(&*n, &*c) {
                 Ok(p) => Rc::into_raw(Rc::new(p)),
@@ -30,7 +30,7 @@ pub fn plane_create_0(n: *const Vec<f64>, c: *const Vec<f64>)
 #[wasm_bindgen]
 pub fn plane_create_with_2d_0(p1: *const Vec<f64>, p2: *const Vec<f64>)
     -> *const Plane {
-    if std::ptr::null() != p1 && std::ptr::null() != p2 {
+    if !p1.is_null() && !p2.is_null() {
         unsafe {
             match Plane::create_with_2d(&*p1, &*p2) {
                 Ok(p) => Rc::into_raw(Rc::new(p)),
@@ -69,7 +69,7 @@ pub fn plane_create_with_2d(p1: Float64Array, p2: Float64Array)
 /// increment reference count
 #[wasm_bindgen]
 pub fn plane_retain(p: *const Plane) -> usize {
-    if std::ptr::null() != p {
+    if !p.is_null() {
         unsafe {
             let p_ref_0 = Rc::from_raw(p);
             let p_ref_1 = p_ref_0.clone();
@@ -86,7 +86,7 @@ pub fn plane_retain(p: *const Plane) -> usize {
 /// decrement reference count
 #[wasm_bindgen]
 pub fn plane_release(p: *const Plane) -> usize {
-    if std::ptr::null() != p {
+    if !p.is_null() {
         unsafe {
             let p_ref_0 = Rc::from_raw(p);
             let mut result = Rc::strong_count(&p_ref_0);
@@ -102,7 +102,7 @@ pub fn plane_release(p: *const Plane) -> usize {
 #[wasm_bindgen]
 pub fn plane_get_dimension(
     p: *const Plane) -> Option<usize> {
-    if std::ptr::null() != p {
+    if !p.is_null() {
         unsafe {
             Some((*p).get_dimension())
         }
@@ -116,7 +116,7 @@ pub fn plane_get_dimension(
 pub fn plane_distance_0(
     p: *const Plane,
     v: *const Vec<f64>) -> Option<f64> {
-    if std::ptr::null() != p && std::ptr::null() != v {
+    if !p.is_null() && !v.is_null() {
         unsafe {
             match (*p).distance(&(*v)) {
                 Ok(dis) => Some(dis),
@@ -134,7 +134,7 @@ pub fn plane_distance_0(
 pub fn plane_distance(
     p: *const Plane,
     v: Float64Array) -> Option<f64> {
-    if std::ptr::null() != p {
+    if !p.is_null() {
         let vec = vector_create(v);  
         let result = plane_distance_0(p, vec);
         vector_release(vec);
@@ -149,7 +149,7 @@ pub fn plane_distance(
 pub fn plane_project_0(
     p: *const Plane,
     v: *const Vec<f64>) -> Option<Vec<f64>> {
-    if std::ptr::null() != p && std::ptr::null() != v {
+    if !p.is_null() && !v.is_null() {
         unsafe {
             match (*p).project(&(*v)) {
                 Ok(proj_pt) => Some(proj_pt),
@@ -167,7 +167,7 @@ pub fn plane_project_0(
 pub fn plane_project(
     p: *const Plane,
     v: Float64Array) -> Option<Float64Array> {
-    if std::ptr::null() != p {
+    if !p.is_null() {
         let vec = vector_create(v);  
         let res = plane_project_0(p, vec);
         vector_release(vec);
@@ -188,7 +188,7 @@ pub fn plane_sort_points_0_i(
     p: *const Plane,
     va: *const RefCell<Vec<Vec<f64>>>)
     -> *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> {
-    if std::ptr::null() != p && std::ptr::null() != va {
+    if !p.is_null() && !va.is_null() {
         unsafe {
             let sorted_indices = (*p).sort_points_0(&(*va).borrow());
             float_indices_create_0(sorted_indices)
@@ -204,7 +204,7 @@ pub fn plane_sort_points_0(
     p: *const Plane,
     point_container: JsValue)
     -> *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> {
-    if std::ptr::null() != p {
+    if !p.is_null() {
         if point_container.is_object() {
             let array_js = js_sys::Array::from(&point_container);
             let vec_array = vector_array_create();
@@ -243,7 +243,7 @@ pub fn plane_sort_points_1_i(
     p: *const Plane,
     va: *const RefCell<Vec<Vec<f64>>>)
     -> *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
-    if std::ptr::null() != p && std::ptr::null() != va {
+    if !p.is_null() && !va.is_null() {
         unsafe {
             let sorted_indices = (*p).sort_points_1(&(*va).borrow());
             distance_indices_create_0(sorted_indices)
@@ -259,7 +259,7 @@ pub fn plane_sort_points_1(
     p: *const Plane,
     point_container: JsValue)
     -> *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
-    if std::ptr::null() != p {
+    if !p.is_null() {
         if point_container.is_object() {
             let array_js = js_sys::Array::from(&point_container);
             let vec_array = vector_array_create();

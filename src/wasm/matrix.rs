@@ -50,9 +50,9 @@ pub fn matrix_create_with_dimension(dim: usize) -> *const RefCell<Matrix> {
 /// increment reference count
 #[wasm_bindgen]
 pub fn matrix_retain(mat: *const RefCell<Matrix>) -> usize {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
-            if std::ptr::null() != mat {
+            if !mat.is_null() {
                 let mat_rc_0 = Rc::from_raw(mat);
                 let mat_rc_1 = mat_rc_0.clone();
                 let result = Rc::strong_count(&mat_rc_0);
@@ -71,9 +71,9 @@ pub fn matrix_retain(mat: *const RefCell<Matrix>) -> usize {
 /// increment reference count
 #[wasm_bindgen]
 pub fn matrix_release(mat: *const RefCell<Matrix>) -> usize {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
-            if std::ptr::null() != mat {
+            if !mat.is_null() {
                 let mat_rc_0 = Rc::from_raw(mat);
                 let mut result = Rc::strong_count(&mat_rc_0);
                 result -= 1;
@@ -92,7 +92,7 @@ pub fn matrix_release(mat: *const RefCell<Matrix>) -> usize {
 #[wasm_bindgen]
 pub fn matrix_get_components_col_order(mat: *const RefCell<Matrix>)
     -> Option<Float64Array> {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             let array = Float64Array::new_with_length(
                 ((*mat).borrow().get_row_count()
@@ -111,7 +111,7 @@ pub fn matrix_get_components_col_order(mat: *const RefCell<Matrix>)
 #[wasm_bindgen]
 pub fn matrix_get_components_col_order_32(mat: *const RefCell<Matrix>)
     -> Option<Float32Array> {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             let array = Float32Array::new_with_length(
                 ((*mat).borrow().get_row_count()
@@ -131,7 +131,7 @@ pub fn matrix_get_components_col_order_32(mat: *const RefCell<Matrix>)
 #[wasm_bindgen]
 pub fn matrix_get_components_row_order(mat: *const RefCell<Matrix>)
     -> Option<Float64Array> {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             let array = Float64Array::new_with_length(
                 ((*mat).borrow().get_row_count()
@@ -150,7 +150,7 @@ pub fn matrix_get_components_row_order(mat: *const RefCell<Matrix>)
 #[wasm_bindgen]
 pub fn matrix_get_components_row_order_32(mat: *const RefCell<Matrix>)
     -> Option<Float32Array> {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             let array = Float32Array::new_with_length(
                 ((*mat).borrow().get_row_count()
@@ -172,8 +172,8 @@ pub fn matrix_multiply_mut(
     mat1: *const RefCell<Matrix>,
     mat2: *const RefCell<Matrix>)
     -> Option<bool> {
-    if std::ptr::null() != mat1 
-        && std::ptr::null() != mat2 {
+    if !mat1.is_null() 
+        && !mat2.is_null() {
         unsafe {
             Some((*mat1).borrow_mut().multiply_mut(&(*mat2).borrow()))
         }
@@ -188,8 +188,8 @@ pub fn matrix_multiply(
     mat1: *const RefCell<Matrix>,
     mat2: *const RefCell<Matrix>)
     -> *const RefCell<Matrix> {
-    if std::ptr::null() != mat1 
-        && std::ptr::null() != mat2 {
+    if !mat1.is_null() 
+        && !mat2.is_null() {
         unsafe {
             match (*mat1).borrow().multiply(&(*mat2).borrow()) {
                 Some(mat) => {
@@ -208,7 +208,7 @@ pub fn matrix_multiply(
 #[wasm_bindgen]
 pub fn matrix_inverse(
     mat: *const RefCell<Matrix>) -> *const RefCell<Matrix> {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow().inverse() {
                 Some(mat_inv) => {
@@ -229,7 +229,7 @@ pub fn matrix_scale_mut(
     mat: *const RefCell<Matrix>,
     scale: f64) -> bool
 {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             (*mat).borrow_mut().scale_mut(scale);
             true
@@ -245,7 +245,7 @@ pub fn matrix_scale(
     mat: *const RefCell<Matrix>,
     scale: f64) -> *const RefCell<Matrix>
 {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             let mat_res = (*mat).borrow().scale(scale);
             let result = Rc::new(RefCell::new(mat_res));
@@ -263,8 +263,8 @@ pub fn matrix_apply_l_with_vec(
     mat: *const RefCell<Matrix>,
     v: *const Vec<f64>) -> *const Vec<f64>
 {
-    if std::ptr::null() != mat 
-        && std::ptr::null() != v {
+    if !mat.is_null() 
+        && !v.is_null() {
         unsafe {
             match (*mat).borrow().apply_l(&*v) {
                 Ok(vec_res) => { 
@@ -285,8 +285,7 @@ pub fn matrix_apply_r_with_vec(
     mat: *const RefCell<Matrix>,
     v: *const Vec<f64>) -> *const Vec<f64>
 {
-    if std::ptr::null() != mat 
-        && std::ptr::null() != v {
+    if !mat.is_null() && !v.is_null() {
         unsafe {
             match (*mat).borrow().apply_r(&*v) {
                 Ok(vec_res) => { 
@@ -306,7 +305,7 @@ pub fn matrix_apply_l_64(
     mat: *const RefCell<Matrix>,
     v: Float64Array) -> Option<Float64Array>
 {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         let vec = v.to_vec();
         unsafe {
             match (*mat).borrow().apply_l(&vec) {
@@ -328,7 +327,7 @@ pub fn matrix_apply_l_32(
     mat: *const RefCell<Matrix>,
     v: Float32Array) -> Option<Float32Array>
 {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         let vec = super::vector::vector_convert_to_vec64_from_32(v);
         unsafe {
             match (*mat).borrow().apply_l(&vec) {
@@ -350,7 +349,7 @@ pub fn matrix_apply_r_64(
     mat: *const RefCell<Matrix>,
     v: Float64Array) -> Option<Float64Array>
 {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         let vec = v.to_vec();
         unsafe {
             match (*mat).borrow().apply_r(&vec) {
@@ -372,7 +371,7 @@ pub fn matrix_apply_r_32(
     mat: *const RefCell<Matrix>,
     v: Float32Array) -> Option<Float32Array>
 {
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         let vec = super::vector::vector_convert_to_vec64_from_32(v);
         unsafe {
             match (*mat).borrow().apply_r(&vec) {
@@ -416,7 +415,7 @@ pub fn matrix_rotate_mut(
     mat: *const RefCell<Matrix>,
     theta: f64, x: f64, y: f64, z: f64) -> bool {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow_mut().rotate_mut(theta, x, y, z) {
                 Ok(_mat_ref) => true,
@@ -434,7 +433,7 @@ pub fn matrix_rotate (
     mat: *const RefCell<Matrix>,
     theta: f64, x: f64, y: f64, z: f64) -> *const RefCell<Matrix> {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow().rotate(theta, x, y, z) {
                 Ok(mat_res) => {
@@ -456,7 +455,7 @@ pub fn matrix_translate_mut(
     mat: *const RefCell<Matrix>,
     x: f64, y: f64, z: f64) -> bool {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow_mut().translate_mut(x, y, z) {
                 Ok(_mat_ref) => true,
@@ -474,7 +473,7 @@ pub fn matrix_translate(
     mat: *const RefCell<Matrix>,
     x: f64, y: f64, z: f64) -> *const RefCell<Matrix> {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow().translate(x, y, z) {
                 Ok(mat_res) => {
@@ -496,7 +495,7 @@ pub fn matrix_scale3_mut(
     mat: *const RefCell<Matrix>,
     x: f64, y: f64, z: f64) -> bool {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow_mut().scale3_mut(x, y, z) {
                 Ok(_mat_ref) => true,
@@ -514,7 +513,7 @@ pub fn matrix_scale3(
     mat: *const RefCell<Matrix>,
     x: f64, y: f64, z: f64) -> *const RefCell<Matrix> {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow().scale3(x, y, z) {
                 Ok(mat_res) => {
@@ -534,8 +533,9 @@ pub fn matrix_scale3(
 /// create frustum matrix
 #[wasm_bindgen]
 pub fn matrix_new_flustum(
-    l: f64, r: f64, b: f64, t: f64, n: f64, f: f64) -> *const RefCell<Matrix> {
-    match Matrix::new_frustum(l, r, b, t, n, f) {
+    left: f64, right: f64, bottom: f64,
+    top: f64, near: f64, far: f64) -> *const RefCell<Matrix> {
+    match Matrix::new_frustum(left, right, bottom, top, near, far) {
         Ok(mat) => {
             let result = Rc::new(RefCell::new(mat));
             Rc::into_raw(result)
@@ -548,11 +548,13 @@ pub fn matrix_new_flustum(
 #[wasm_bindgen]
 pub fn matrix_frustum_mut(
     mat: *const RefCell<Matrix>,
-    l: f64, r: f64, b: f64, t: f64, n: f64, f: f64) -> bool {
+    left: f64, right: f64, bottom: f64,
+    top: f64, near: f64, far: f64) -> bool {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
-            match (*mat).borrow_mut().frustum_mut(l, r, b, t, n, f) {
+            match (*mat).borrow_mut().frustum_mut(
+                left, right, bottom, top, near, far) {
                 Ok(_mat_ref) => true,
                 Err(_) => false
             }
@@ -566,12 +568,12 @@ pub fn matrix_frustum_mut(
 #[wasm_bindgen]
 pub fn matrix_frustum(
     mat: *const RefCell<Matrix>,
-    l: f64, r: f64, b: f64, t: f64, n: f64, f: f64)
+    left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64)
     -> *const RefCell<Matrix> {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
-            match (*mat).borrow().frustum(l, r, b, t, n, f) {
+            match (*mat).borrow().frustum(left, right, bottom, top, near, far) {
                 Ok(mat_res) => {
                     let result = Rc::new(RefCell::new(mat_res));
                     Rc::into_raw(result)
@@ -590,8 +592,8 @@ pub fn matrix_frustum(
 /// create ortho matrix
 #[wasm_bindgen]
 pub fn matrix_new_ortho(
-    l: f64, r: f64, b: f64, t: f64, n: f64, f: f64) -> *const RefCell<Matrix> {
-    match Matrix::new_ortho(l, r, b, t, n, f) {
+    left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64) -> *const RefCell<Matrix> {
+    match Matrix::new_ortho(left, right, bottom, top, near, far) {
         Ok(mat) => {
             let result = Rc::new(RefCell::new(mat));
             Rc::into_raw(result)
@@ -605,11 +607,11 @@ pub fn matrix_new_ortho(
 #[wasm_bindgen]
 pub fn matrix_ortho_mut(
     mat: *const RefCell<Matrix>,
-    l: f64, r: f64, b: f64, t: f64, n: f64, f: f64) -> bool {
+    left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64) -> bool {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
-            match (*mat).borrow_mut().ortho_mut(l, r, b, t, n, f) {
+            match (*mat).borrow_mut().ortho_mut(left, right, bottom, top, near, far) {
                 Ok(_mat_ref) => true,
                 Err(_) => false
             }
@@ -623,12 +625,12 @@ pub fn matrix_ortho_mut(
 #[wasm_bindgen]
 pub fn matrix_ortho(
     mat: *const RefCell<Matrix>,
-    l: f64, r: f64, b: f64, t: f64, n: f64, f: f64)
+    left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64)
     -> *const RefCell<Matrix> {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
-            match (*mat).borrow().ortho(l, r, b, t, n, f) {
+            match (*mat).borrow().ortho(left, right, bottom, top, near, far) {
                 Ok(mat_res) => {
                     let result = Rc::new(RefCell::new(mat_res));
                     Rc::into_raw(result)
@@ -660,7 +662,7 @@ pub fn matrix_perspective_mut(
     mat: *const RefCell<Matrix>,
     fovy: f64, aspect: f64, z_near: f64, z_far: f64) -> bool {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow_mut().perspective_mut(
                  fovy, aspect, z_near, z_far) {
@@ -680,7 +682,7 @@ pub fn matrix_perspective(
     fovy: f64, aspect: f64, z_near: f64, z_far: f64)
     -> *const RefCell<Matrix> {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow().perspective(fovy, aspect, z_near, z_far) {
                 Ok(mat_res) => {
@@ -698,6 +700,7 @@ pub fn matrix_perspective(
 
 /// create look at matrix
 #[wasm_bindgen]
+#[allow(clippy::too_many_arguments)]
 pub fn matrix_new_look_at(
     eye_x: f64, eye_y: f64, eye_z: f64,
     center_x: f64, center_y: f64, center_z: f64,
@@ -716,13 +719,14 @@ pub fn matrix_new_look_at(
 
 /// apply look at matrix
 #[wasm_bindgen]
+#[allow(clippy::too_many_arguments)]
 pub fn matrix_look_at_mut(
     mat: *const RefCell<Matrix>,
     eye_x: f64, eye_y: f64, eye_z: f64,
     center_x: f64, center_y: f64, center_z: f64,
     up_x: f64, up_y: f64, up_z: f64) -> bool {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow_mut().look_at_mut(
                 eye_x, eye_y, eye_z,
@@ -739,6 +743,7 @@ pub fn matrix_look_at_mut(
 
 /// apply perspective matrix
 #[wasm_bindgen]
+#[allow(clippy::too_many_arguments)]
 pub fn matrix_look_at(
     mat: *const RefCell<Matrix>,
     eye_x: f64, eye_y: f64, eye_z: f64,
@@ -746,7 +751,7 @@ pub fn matrix_look_at(
     up_x: f64, up_y: f64, up_z: f64)
     -> *const RefCell<Matrix> {
 
-    if std::ptr::null() != mat {
+    if !mat.is_null() {
         unsafe {
             match (*mat).borrow().look_at(
                 eye_x, eye_y, eye_z,

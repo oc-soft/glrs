@@ -3,7 +3,9 @@ use js_sys::Float64Array;
 use js_sys::Float32Array;
 use wasm_bindgen::prelude::*;
 
+
 /// create vector
+#[allow(dead_code)]
 pub fn vector_create_from_vec(
     v: Vec<f64>) -> *const Vec<f64> {
     let result = Rc::new(v);
@@ -11,17 +13,19 @@ pub fn vector_create_from_vec(
 }
 
 /// create vector
+#[allow(dead_code)]
 pub fn vector_create_from_vec_ref(
-    v: &Vec<f64>) -> *const Vec<f64> {
+    v: &[f64]) -> *const Vec<f64> {
     let mut vec = Vec::with_capacity(v.len());
-    for i in 0..v.len() {
-        vec.push(v[i]);
+    for elem in v {
+        vec.push(*elem);
     }
     vector_create_from_vec(vec)
 }
 
 
 /// convert Vec<f64> from Float32Array
+#[allow(dead_code)]
 pub fn vector_convert_to_vec64_from_32(
     components: Float32Array) -> Vec<f64> {
     let mut result  = Vec::with_capacity(components.length() as usize);
@@ -32,21 +36,23 @@ pub fn vector_convert_to_vec64_from_32(
 }
 
 /// convert Float64Array from Vec<f64>
+#[allow(dead_code)]
 pub fn vector_convert_to_array64_from_64(
-    components: &Vec<f64>) -> Float64Array {
+    components: &[f64]) -> Float64Array {
     let result  = Float64Array::new_with_length(components.len() as u32);
-    for i in 0..components.len() {
-        result.set_index(i as u32, components[i]);
+    for (i, elem) in components.iter().enumerate() {
+        result.set_index(i as u32, *elem);
     }
     result
 }
 
 /// convert Float64Array from Vec<f64>
+#[allow(dead_code)]
 pub fn vector_convert_to_array32_from_64(
-    components: &Vec<f64>) -> Float32Array {
+    components: &[f64]) -> Float32Array {
     let result  = Float32Array::new_with_length(components.len() as u32);
-    for i in 0..components.len() {
-        result.set_index(i as u32, components[i] as f32);
+    for (i, elem) in components.iter().enumerate() {
+        result.set_index(i as u32, *elem as f32);
     }
     result
 }
@@ -54,14 +60,16 @@ pub fn vector_convert_to_array32_from_64(
 
 /// create vector
 #[wasm_bindgen]
+#[allow(dead_code)]
 pub fn vector_create(components: Float64Array) -> *const Vec<f64> {
     vector_create_from_vec(components.to_vec())
 }
 
 /// get vector components
 #[wasm_bindgen]
+#[allow(dead_code)]
 pub fn vector_get_components(v: *const Vec<f64>) -> Option<Float64Array> {
-    if std::ptr::null() != v {
+    if !v.is_null() {
         unsafe {
             let array = Float64Array::new_with_length((*v).len() as u32);
             for i in 0..(*v).len() {
@@ -76,8 +84,9 @@ pub fn vector_get_components(v: *const Vec<f64>) -> Option<Float64Array> {
 
 /// get vector components
 #[wasm_bindgen]
+#[allow(dead_code)]
 pub fn vector_get_components_32(v: *const Vec<f64>) -> Option<Float32Array> {
-    if std::ptr::null() != v {
+    if !v.is_null() {
         unsafe {
             let array = Float32Array::new_with_length((*v).len() as u32);
             for i in 0..(*v).len() {
@@ -93,8 +102,9 @@ pub fn vector_get_components_32(v: *const Vec<f64>) -> Option<Float32Array> {
 
 /// get a component in vector
 #[wasm_bindgen]
+#[allow(dead_code)]
 pub fn vector_get_component(v: *const Vec<f64>, idx: usize) -> Option<f64> {
-    if std::ptr::null() != v {
+    if !v.is_null() {
         unsafe {
             if idx < (*v).len() {
                 Some((*v)[idx])
@@ -109,8 +119,9 @@ pub fn vector_get_component(v: *const Vec<f64>, idx: usize) -> Option<f64> {
 
 /// increment reference count
 #[wasm_bindgen]
+#[allow(dead_code)]
 pub fn vector_retain(v: *const Vec<f64>) -> usize {
-    if std::ptr::null() != v {
+    if !v.is_null() {
         unsafe {
             let v1 = Rc::from_raw(v);
             let v2 = v1.clone();
@@ -126,8 +137,9 @@ pub fn vector_retain(v: *const Vec<f64>) -> usize {
 
 /// decrement refenrece count
 #[wasm_bindgen]
+#[allow(dead_code)]
 pub fn vector_release(v: *const Vec<f64>) -> usize {
-    if std::ptr::null() != v {
+    if !v.is_null() {
         unsafe {
             let vec = Rc::from_raw(v);
             let mut result = Rc::strong_count(&vec);
@@ -141,8 +153,9 @@ pub fn vector_release(v: *const Vec<f64>) -> usize {
 
 /// vector dimension
 #[wasm_bindgen]
+#[allow(dead_code)]
 pub fn vector_dimension(v: *const Vec<f64>) -> usize {
-    if std::ptr::null() != v {
+    if !v.is_null() {
         unsafe { (*v).len() }
     } else {
         0 as usize

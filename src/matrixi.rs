@@ -18,7 +18,7 @@ impl MatrixI {
     ) -> Result<Self, MatrixError> {
         Ok(MatrixI {
             component: comp,
-            col_count: col_count,
+            col_count,
         })
     }
 
@@ -161,7 +161,8 @@ impl MatrixI {
 
 impl MatrixI {
     /// apply matrix left sidei
-    pub fn apply_l(&self, v: &Vec<f64>) -> Result<Vec<f64>, MatrixError> {
+    #[allow(clippy::needless_range_loop)]
+    pub fn apply_l(&self, v: &[f64]) -> Result<Vec<f64>, MatrixError> {
         if v.len() >= self.col_count() {
             let mut result = Vec::with_capacity(self.col_count());
             for cidx in 0..self.col_count() {
@@ -178,7 +179,8 @@ impl MatrixI {
     }
 
     /// apply matrix left sidei
-    pub fn apply_r(&self, v: &Vec<f64>) -> Result<Vec<f64>, MatrixError> {
+    #[allow(clippy::needless_range_loop)]
+    pub fn apply_r(&self, v: &[f64]) -> Result<Vec<f64>, MatrixError> {
         if v.len() >= self.row_count() {
             let mut result = Vec::with_capacity(self.row_count());
             for ridx in 0..self.row_count() {

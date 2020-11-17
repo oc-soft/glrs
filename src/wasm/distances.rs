@@ -36,7 +36,7 @@ pub fn distances_release(
 #[wasm_bindgen]
 pub fn distances_size(
     distances: *const Vec<Distance>) -> usize {
-    if std::ptr::null() != distances {
+    if !distances.is_null() {
         unsafe {
             (*distances).len()
         }
@@ -50,7 +50,7 @@ pub fn distances_size(
 pub fn distances_get(
     distances: *const Vec<Distance>,
     idx: usize) -> *const Distance {
-    if std::ptr::null() != distances {
+    if !distances.is_null() {
         unsafe {
             if idx < distances_size(distances) {
                 distance_create_0(&(*distances)[idx])

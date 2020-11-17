@@ -22,10 +22,12 @@ pub struct Matrix {
 /// matrix implementatoin
 impl Matrix {
     /// constructor
+    #[allow(clippy::needless_range_loop)]
     fn new_with_source_component_row_order_0(
         dim: usize,
-        component: &Vec<f64>,
+        component: &[f64],
     ) -> Matrix {
+
         let vec_count = dim.pow(2);
         let mut comp = Vec::with_capacity(vec_count);
         for i in 0..vec_count {
@@ -33,13 +35,13 @@ impl Matrix {
         }
         Matrix {
             component: Rc::new(RefCell::new(comp)),
-            dim: dim,
+            dim,
         }
     }
     /// constructor
     fn new_with_source_component_col_order_0(
         dim: usize,
-        component: &Vec<f64>,
+        component: &[f64],
     ) -> Matrix {
         let vec_count = dim.pow(2);
         let mut comp = Vec::with_capacity(vec_count);
@@ -50,19 +52,19 @@ impl Matrix {
         }
         Matrix {
             component: Rc::new(RefCell::new(comp)),
-            dim: dim,
+            dim,
         }
     }
 
     /// constructor
-    pub fn new_with_source_component_row_order(component: &Vec<f64>) -> Matrix {
+    pub fn new_with_source_component_row_order(component: &[f64]) -> Matrix {
         Self::new_with_source_component_row_order_0(
             (component.len() as f64).sqrt().floor() as usize,
             component,
         )
     }
     /// constructor
-    pub fn new_with_source_component_col_order(component: &Vec<f64>) -> Matrix {
+    pub fn new_with_source_component_col_order(component: &[f64]) -> Matrix {
 
         Self::new_with_source_component_col_order_0(
             (component.len() as f64).sqrt().floor() as usize,
@@ -88,7 +90,7 @@ impl Matrix {
             }
             let matrix = Matrix {
                 component: comp,
-                dim: dim,
+                dim,
             };
             Ok(matrix)
         } else {
@@ -123,12 +125,12 @@ impl Matrix {
 
     /// get row count
     pub fn get_row_count(&self) -> usize {
-        return self.dim;
+        self.dim
     }
 
     /// get column count
     pub fn get_col_count(&self) -> usize {
-        return self.dim;
+        self.dim
     }
 }
 
@@ -334,6 +336,7 @@ impl Matrix {
 
 impl Matrix {
     /// apply this matrix to v from left side
+    #[allow(clippy::ptr_arg)]
     pub fn apply_l(&self, v: &Vec<f64>) -> Result<Vec<f64>, MatrixError> {
         let matop =
             MatrixI::bind_with_col_count(self.component.clone(), self.dim)
@@ -342,6 +345,7 @@ impl Matrix {
     }
 
     /// apply this matrix to v from right side
+    #[allow(clippy::ptr_arg)]
     pub fn apply_r(&self, v: &Vec<f64>) -> Result<Vec<f64>, MatrixError> {
         let matop =
             MatrixI::bind_with_col_count(self.component.clone(), self.dim)
@@ -353,7 +357,7 @@ impl Matrix {
 impl Matrix {
     /// iterate column order
     pub fn iterate_col_order(&self,
-        call_back: &mut dyn FnMut(usize, f64) -> bool) ->() { 
+        call_back: &mut dyn FnMut(usize, f64) -> bool) { 
         let size = self.get_row_count() * self.get_col_count();
         for i in 0..size {
             let ridx = i % self.get_col_count();
@@ -366,7 +370,7 @@ impl Matrix {
     }
     /// iterate row order
     pub fn iterate_row_order(&self,
-        call_back: &mut dyn FnMut(usize, f64) -> bool) ->() { 
+        call_back: &mut dyn FnMut(usize, f64) -> bool)  { 
         let size = self.get_row_count() * self.get_col_count();
         for i in 0..size {
             let ridx = i / self.get_col_count();
@@ -408,9 +412,10 @@ impl Matrix {
 /// 3d operation
 impl Matrix {
     /// outer product
-    pub fn outer_product(u: &Vec<f64>, v: &Vec<f64>)
+    #[allow(clippy::needless_range_loop)]
+    pub fn outer_product(u: &[f64], v: &[f64])
         -> Result<Matrix, MatrixError>  {
-        if u.len() > 0 && v.len() > 0 {
+        if !u.is_empty() && !v.is_empty() {
             let dim = std::cmp::min(u.len(), v.len());
             let mut mat = Matrix::new(dim).unwrap();
             for ridx in 0..dim {
@@ -468,25 +473,27 @@ impl Matrix {
     }
 
     /// frustum 
-    pub fn new_frustum(l: f64, r: f64, b: f64, t: f64, n: f64, f: f64)
+    pub fn new_frustum(
+        left: f64, right: f64,
+        bottom: f64, top: f64, near: f64, far: f64)
         -> Result<Self, MatrixError> {
-        let rl = r - l;
-        let tb = t - b;
-        let fn_v = f - n;
+        let rl = right - left;
+        let tb = top - bottom;
+        let fn_v = far - near;
         
-        if f > 0.0 && n > 0.0
+        if far > 0.0 && near > 0.0
             && rl != 0.0 || rl != -0.0
             && tb != 0.0 || tb != -0.0
             && fn_v != 0.0 || fn_v != -0.0 {
             let mut result = Matrix::new(4).unwrap();
-            result.set_component(0, 0, 2.0 * n / rl).unwrap(); 
-            result.set_component(1, 1, 2.0 * n / tb).unwrap(); 
-            result.set_component(2, 2, -(f + n) / fn_v).unwrap(); 
+            result.set_component(0, 0, 2.0 * near / rl).unwrap(); 
+            result.set_component(1, 1, 2.0 * near / tb).unwrap(); 
+            result.set_component(2, 2, -(far + near) / fn_v).unwrap(); 
             result.set_component(3, 3, 0.0).unwrap();
             
-            result.set_component(0, 2, (r + l) / rl).unwrap(); 
-            result.set_component(1, 2, (t + b) / tb).unwrap(); 
-            result.set_component(2, 3, (-2.0 * f * n) / fn_v).unwrap(); 
+            result.set_component(0, 2, (right + left) / rl).unwrap(); 
+            result.set_component(1, 2, (top + bottom) / tb).unwrap(); 
+            result.set_component(2, 3, (-2.0 * far * near) / fn_v).unwrap(); 
             result.set_component(3, 2, -1.0).unwrap();
 
             Ok(result) 
@@ -495,11 +502,12 @@ impl Matrix {
         }
     }
     /// ortho 
-    pub fn new_ortho(l: f64, r: f64, b: f64, t: f64, n: f64, f: f64)
+    pub fn new_ortho(
+        left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64)
         -> Result<Self, MatrixError> {
-        let rl = r - l;
-        let tb = t - b;
-        let fn_v = f - n;
+        let rl = right - left;
+        let tb = top - bottom;
+        let fn_v = far - near;
         
         if rl != 0.0 || rl != -0.0
             && tb != 0.0 || tb != -0.0
@@ -510,9 +518,9 @@ impl Matrix {
             result.set_component(2, 2, -2.0 / fn_v).unwrap(); 
             result.set_component(3, 3, 0.0).unwrap();
             
-            result.set_component(0, 3, -(r + l) / rl).unwrap(); 
-            result.set_component(1, 3, -(t + b) / tb).unwrap(); 
-            result.set_component(2, 3, -(f + n) / fn_v).unwrap(); 
+            result.set_component(0, 3, -(right + left) / rl).unwrap(); 
+            result.set_component(1, 3, -(top + bottom) / tb).unwrap(); 
+            result.set_component(2, 3, -(far + near) / fn_v).unwrap(); 
             result.set_component(3, 3, 1.0).unwrap();
 
             Ok(result) 
@@ -545,6 +553,7 @@ impl Matrix {
     }
  
     /// the matrix to look at the object  
+    #[allow(clippy::too_many_arguments)]
     pub fn new_look_at(
         eye_x: f64, eye_y: f64, eye_z: f64,
         center_x: f64, center_y: f64, center_z: f64,
@@ -639,6 +648,7 @@ impl Matrix {
     }
 
     /// translate matrix
+    #[allow(clippy::needless_range_loop)]
     pub fn translate_mut(&mut self, x: f64, y: f64, z:f64)
         -> Result<&Self, MatrixError> {
         if self.dim == 4 {
@@ -668,6 +678,7 @@ impl Matrix {
     }
 
     /// scale {x, y, z} component
+    #[allow(clippy::needless_range_loop)]
     pub fn scale3_mut(&mut self, x: f64, y: f64, z: f64)
         -> Result<&Self, MatrixError> {
         if self.dim > 2 && self.dim < 5 {
@@ -697,10 +708,10 @@ impl Matrix {
 
     /// frustum 
     pub fn frustum_mut(&mut self,
-        l: f64, r: f64, b: f64, t: f64, n: f64, f: f64)
+        left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64)
         -> Result<&Self, MatrixError> {
         if self.dim == 4 {
-            match Self::new_frustum(l, r, b, t, n, f) {
+            match Self::new_frustum(left, right, bottom, top, near, far) {
                 Ok(frustum) => {
                     let mut mat_0 = MatrixI::bind_with_col_count_0(
                         self.component.clone(), self.dim).unwrap();
@@ -717,11 +728,11 @@ impl Matrix {
     }
     /// frustum 
     pub fn frustum(& self,
-        l: f64, r: f64, b: f64, t: f64, n: f64, f: f64)
+        left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64)
         -> Result<Self, MatrixError> {
         if self.dim == 4 { 
             let mut result = self.clone();
-            match result.frustum_mut(l, r, b, t, n, f) {
+            match result.frustum_mut(left, right, bottom, top, near, far) {
                 Ok(_frustum) => Ok(result),
                 Err(e) => Err(e)
             }
@@ -732,10 +743,10 @@ impl Matrix {
 
     /// ortho 
     pub fn ortho_mut(&mut self,
-        l: f64, r: f64, b: f64, t: f64, n: f64, f: f64)
+        left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64)
         -> Result<&Self, MatrixError> {
         if self.dim == 4 {
-            match Self::new_ortho(l, r, b, t, n, f) {
+            match Self::new_ortho(left, right, bottom, top, near, far) {
                 Ok(ortho) => {
                     let mut mat_0 = MatrixI::bind_with_col_count_0(
                         self.component.clone(), self.dim).unwrap();
@@ -752,11 +763,11 @@ impl Matrix {
     }
     /// ortho 
     pub fn ortho(& self,
-        l: f64, r: f64, b: f64, t: f64, n: f64, f: f64)
+        left: f64, right: f64, bottom: f64, top: f64, near: f64, far: f64)
         -> Result<Self, MatrixError> {
         if self.dim == 4 { 
             let mut result = self.clone();
-            match result.ortho_mut(l, r, b, t, n, f) {
+            match result.ortho_mut(left, right, bottom, top, near, far) {
                 Ok(_ortho) => Ok(result),
                 Err(e) => Err(e)
             }
@@ -802,6 +813,7 @@ impl Matrix {
     }
 
     /// apply matrix to look at the object  
+    #[allow(clippy::too_many_arguments)]
     pub fn look_at_mut(
         &mut self,
         eye_x: f64, eye_y: f64, eye_z: f64,
@@ -829,6 +841,7 @@ impl Matrix {
         }
     } 
     /// apply matrix to look at the object  
+    #[allow(clippy::too_many_arguments)]
     pub fn look_at(
         &self,
         eye_x: f64, eye_y: f64, eye_z: f64,
@@ -865,7 +878,7 @@ impl Add for Matrix {
 
     /// it works as operator +
     fn add(self, other: Self) -> Self {
-        let res = self.clone();
+        let res = self;
         {
             let mut mat1 =
                 MatrixI::bind_with_col_count_0(res.component.clone(), res.dim)
@@ -884,7 +897,7 @@ impl Sub for Matrix {
 
     /// it works as operator - 
     fn sub(self, other: Self) -> Self {
-        let res = self.clone();
+        let res = self;
         {
             let mut mat1 =
                 MatrixI::bind_with_col_count_0(res.component.clone(), res.dim)
@@ -902,7 +915,7 @@ impl Mul for Matrix {
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self {
-        let res = self.clone();
+        let res = self;
         {
             let mut mat1 =
                 MatrixI::bind_with_col_count_0(res.component.clone(), res.dim)

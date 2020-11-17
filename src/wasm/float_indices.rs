@@ -16,7 +16,7 @@ pub fn float_indices_create_0(
 #[wasm_bindgen]
 pub fn float_indices_retain(
     fi: *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>>) -> usize {
-    if std::ptr::null() != fi {
+    if !fi.is_null() {
         unsafe {
             let fi_ref_0 = Rc::from_raw(fi);
             let fi_ref_1 = fi_ref_0.clone(); 
@@ -34,7 +34,7 @@ pub fn float_indices_retain(
 #[wasm_bindgen]
 pub fn float_indices_release(
     fi: *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>>) -> usize {
-    if std::ptr::null() != fi {
+    if !fi.is_null() {
         unsafe {
             let fi_ref_0 = Rc::from_raw(fi);
             let mut result = Rc::strong_count(&fi_ref_0);
@@ -51,13 +51,13 @@ pub fn float_indices_release(
 pub fn float_indices_get_float_keys(
     fi: *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>>)
     -> *const Vec<OrderedFloat<f64>> {
-    if std::ptr::null() != fi {
+    if !fi.is_null() {
         unsafe {
             let keys_itr = (*fi).keys();
 
             let mut keys = Vec::new();
             for key in keys_itr {
-                keys.push(key.clone());
+                keys.push(*key);
             }
             Rc::into_raw(Rc::new(keys))
         }
@@ -72,7 +72,7 @@ pub fn float_indices_get_indices(
     fi: *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>>,
     float_obj: *const OrderedFloat<f64>)
     -> Option<Uint32Array> {
-    if std::ptr::null() != fi && std::ptr::null() != float_obj {
+    if !fi.is_null() && !float_obj.is_null() {
         unsafe {
             match (*fi).get(&*float_obj) {
                 Some(vec) =>  {

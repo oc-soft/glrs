@@ -16,7 +16,7 @@ pub fn distance_indices_create_0(
 #[wasm_bindgen]
 pub fn distance_indices_retain(
     di: *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>>) -> usize {
-    if std::ptr::null() != di {
+    if !di.is_null() {
         unsafe {
             let di_ref_0 = Rc::from_raw(di);
             let di_ref_1 = di_ref_0.clone(); 
@@ -34,7 +34,7 @@ pub fn distance_indices_retain(
 #[wasm_bindgen]
 pub fn distance_indices_release(
     di: *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>>) -> usize {
-    if std::ptr::null() != di {
+    if !di.is_null() {
         unsafe {
             let di_ref_0 = Rc::from_raw(di);
             let mut result = Rc::strong_count(&di_ref_0);
@@ -51,13 +51,13 @@ pub fn distance_indices_release(
 pub fn distance_indices_get_distances(
     di: *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>>)
     -> *const Vec<Distance> {
-    if std::ptr::null() != di {
+    if !di.is_null() {
         unsafe {
             let keys_itr = (*di).keys();
 
             let mut keys = Vec::new();
             for key in keys_itr {
-                keys.push(key.clone());
+                keys.push(*key);
             }
             Rc::into_raw(Rc::new(keys))
         }
@@ -72,7 +72,7 @@ pub fn distance_indices_get_indices(
     di: *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>>,
     distance: *const Distance)
     -> Option<Uint32Array> {
-    if std::ptr::null() != di && std::ptr::null() != distance {
+    if !di.is_null() && !distance.is_null() {
         unsafe {
             match (*di).get(&*distance) {
                 Some(vec) =>  {

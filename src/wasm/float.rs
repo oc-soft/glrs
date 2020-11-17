@@ -20,7 +20,7 @@ pub fn float_create(
 #[wasm_bindgen]
 pub fn float_retain(
     float_obj: *const OrderedFloat<f64>) -> usize {
-    if std::ptr::null() != float_obj {
+    if !float_obj.is_null() {
         unsafe {
             let float_ref_0 = Rc::from_raw(float_obj);
             let float_ref_1 = float_ref_0.clone();
@@ -38,7 +38,7 @@ pub fn float_retain(
 #[wasm_bindgen]
 pub fn float_release(
     float_obj: *const OrderedFloat<f64>) -> usize {
-    if std::ptr::null() != float_obj {
+    if !float_obj.is_null() {
         unsafe {
             let float_ref = Rc::from_raw(float_obj);
             let mut result = Rc::strong_count(&float_ref);
@@ -55,7 +55,7 @@ pub fn float_release(
 #[wasm_bindgen]
 pub fn float_get_value(
     float_obj: *const OrderedFloat<f64>) -> Option<f64> {
-    if std::ptr::null() != float_obj {
+    if !float_obj.is_null() {
         unsafe {
             Some((*float_obj).into_inner())
         }

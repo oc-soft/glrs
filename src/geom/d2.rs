@@ -9,7 +9,7 @@ impl D2 {
 
     /// move each points offset along to line(p1 p2) normal vector
     pub fn offset_points_0(
-        offset: f64, p1: &Vec<f64>, p2: &Vec<f64>, tolerance:f64)
+        offset: f64, p1: &[f64], p2: &[f64], tolerance:f64)
         -> Result<[Vec<f64>; 2], GeomError> { 
         if p1.len() > 1 && p2.len() > 1 {
             let p1_d2 = vec!(p1[0], p1[1]);
@@ -32,14 +32,14 @@ impl D2 {
 
     /// move each points offset along to line(p1 p2) normal vector
     pub fn offset_points(
-        offset: f64, p1: &Vec<f64>, p2: &Vec<f64>)
+        offset: f64, p1: &[f64], p2: &[f64])
         -> Result<[Vec<f64>; 2], GeomError> { 
         Self::offset_points_0(offset, p1, p2, 0.0)
     }
 
     /// move all of points with offset displacement
     pub fn offset_points_vec_0(
-        offset: f64, points: &Vec<Vec<f64>>, 
+        offset: f64, points: &[Vec<f64>], 
         close: bool, tolerance:f64)
         -> Result<Vec<Vec<f64>>, GeomError> {
         
@@ -159,13 +159,13 @@ impl D2 {
     }
     /// move all of points with offset displacement
     pub fn offset_points_vec(
-        offset: f64, points: &Vec<Vec<f64>>, 
+        offset: f64, points: &[Vec<f64>], 
         close: bool)
         -> Result<Vec<Vec<f64>>, GeomError> {
         Self::offset_points_vec_0(offset, points, close, 0.0)
     }
  
-    fn dup_vec(source: &Vec<f64>) -> Vec<f64> {
+    fn dup_vec(source: &[f64]) -> Vec<f64> {
         let mut result = Vec::with_capacity(source.len());
         result.extend_from_slice(source);
         result

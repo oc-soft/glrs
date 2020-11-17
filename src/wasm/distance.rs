@@ -19,7 +19,7 @@ pub fn distance_create(
 #[wasm_bindgen]
 pub fn distance_retain(
     distance: *const Distance) -> usize {
-    if std::ptr::null() != distance {
+    if !distance.is_null() {
         unsafe {
             let distance_ref_0 = Rc::from_raw(distance);
             let distance_ref_1 = distance_ref_0.clone();
@@ -37,7 +37,7 @@ pub fn distance_retain(
 #[wasm_bindgen]
 pub fn distance_release(
     distance: *const Distance) -> usize {
-    if std::ptr::null() != distance {
+    if !distance.is_null() {
         unsafe {
             let distance_ref = Rc::from_raw(distance);
             let mut result = Rc::strong_count(&distance_ref);
@@ -54,7 +54,7 @@ pub fn distance_release(
 #[wasm_bindgen]
 pub fn distance_get_value(
     distance: *const Distance) -> Option<f64> {
-    if std::ptr::null() != distance {
+    if !distance.is_null() {
         unsafe {
             Some((*distance).get_distance())
         }
@@ -67,7 +67,7 @@ pub fn distance_get_value(
 #[wasm_bindgen]
 pub fn distance_get_abs_value(
     distance: *const Distance) -> Option<f64> {
-    if std::ptr::null() != distance {
+    if !distance.is_null() {
         unsafe {
             Some((*distance).get_abs_distance())
         }

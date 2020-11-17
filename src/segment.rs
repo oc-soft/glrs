@@ -19,9 +19,9 @@ pub struct Segment {
 
 impl Segment {
     /// constructor
-    pub fn create_0(d: &Vec<f64>, c: &Vec<f64>, t: &[f64;2])
+    pub fn create_0(d: &[f64], c: &[f64], t: &[f64;2])
         -> Result<Segment, GeomError> {
-        if d.len() > 1 &&  c.len() > 1 && t[0] != t[1] {
+        if d.len() > 1 &&  c.len() > 1 && (t[0] - t[1]).abs() > 0.0 {
             let dim = min(d.len(), c.len());
             let mut d_0 = Vec::with_capacity(dim);
             let mut c_0 = Vec::with_capacity(dim);
@@ -31,7 +31,7 @@ impl Segment {
             }
             let mut d_len = geom::length(&d_0).unwrap();
             if d_len > 0.0 {
-                let mut t_0 = t.clone();
+                let mut t_0 = *t;
                 for elm in &mut t_0 {
                     *elm *= d_len; 
                 }
@@ -56,28 +56,25 @@ impl Segment {
                         c: c_0,
                         t: t_0 
                     })
-                } else {
-
-                    if dim > 1 {
-                        if d_0[dim - 2]  != 0.0 || d_0[dim - 2] != -0.0 {
-                            // the scale for normalize c into plane which is 
-                            // last coordinate is zero
-                            let c_scale = - c_0[dim - 2] / d_0[dim - 2]; 
-                            let c_0 = geom::plus(
-                                &geom::scale(c_scale, &d_0), &c_0).unwrap();
-                            t_0[0] = - c_scale;
-                            t_0[1] = t_0[0] + t_diff;
-                            Ok(Segment {
-                                d: d_0,
-                                c: c_0,
-                                t: t_0 
-                            })
-                        } else {
-                            Err(GeomError)
-                        }
+                } else if dim > 1 {
+                    if d_0[dim - 2]  != 0.0 || d_0[dim - 2] != -0.0 {
+                        // the scale for normalize c into plane which is 
+                        // last coordinate is zero
+                        let c_scale = - c_0[dim - 2] / d_0[dim - 2]; 
+                        let c_0 = geom::plus(
+                            &geom::scale(c_scale, &d_0), &c_0).unwrap();
+                        t_0[0] = - c_scale;
+                        t_0[1] = t_0[0] + t_diff;
+                        Ok(Segment {
+                            d: d_0,
+                            c: c_0,
+                            t: t_0 
+                        })
                     } else {
                         Err(GeomError)
                     }
+                } else {
+                    Err(GeomError)
                 }
             } else {
                 Err(GeomError)
@@ -89,7 +86,7 @@ impl Segment {
 
 
     /// constructor
-    pub fn create_1(p1: &Vec<f64>, p2: &Vec<f64>)
+    pub fn create_1(p1: &[f64], p2: &[f64])
         -> Result<Segment, GeomError> {
         if p1.len() > 1 &&  p2.len() > 1 {
             let d = geom::minus(p2, p1).unwrap();   
@@ -158,8 +155,8 @@ impl Segment {
         let d_prod = geom::dot_product(&d_1, &d_2).unwrap(); 
         if (1.0 - d_prod).abs() > tolerance {
             let d_mat = Matrix::new_with_source_component_row_order(
-                &vec!(- d_1[1], d_1[0],
-                    - d_2[1], d_2[0]));
+                &[- d_1[1], d_1[0],
+                    - d_2[1], d_2[0]]);
             let dc_vec = vec!(d_1[0] * self.c[1] - d_1[1] * self.c[0],
                 d_2[0] * other.c[1] - d_2[1] * other.c[0]);
             match d_mat.inverse() {
@@ -236,8 +233,8 @@ impl Clone for Segment {
         let d = Vec::with_capacity(self.d.len());
         let c = Vec::with_capacity(self.c.len());
         Self {
-            d: d,
-            c: c,
+            d,
+            c,
             t: self.t
         }
     }

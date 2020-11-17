@@ -15,14 +15,14 @@ pub fn geom_d2_offset_points_00(
     p2: *const Vec<f64>,
     tolerance: f64) -> *const RefCell<Vec<Vec<f64>>> {
 
-    if p1 != std::ptr::null() && p2 != std::ptr::null() {
+    if !p1.is_null() && !p2.is_null() {
         unsafe {
             let pts_res = geom::D2::offset_points_0(offset,
                 &*p1, &*p2, tolerance);
             if let Ok(pts) = pts_res {
                 let result = vector_array_create(); 
-                for i in 0..pts.len() {
-                    vector_array_add_00(result, &pts[i]);
+                for pt in &pts {
+                    vector_array_add_00(result, pt);
                 }
                 result
             } else {
@@ -49,7 +49,7 @@ pub fn geom_d2_offset_points_01(
 
     vector_release(vec_1);
     vector_release(vec_2);
-    return result;
+    result
 }
 
 /// move points toward cross line direction with offset
@@ -61,7 +61,7 @@ pub fn geom_d2_offset_points_02(
     tolerance: f64) -> Option<js_sys::Array> {
 
     let offset_pts = geom_d2_offset_points_01(offset, p1, p2, tolerance);
-    if offset_pts != std::ptr::null() {
+    if !offset_pts.is_null() {
         let offset_pts_js = vector_array_get_components_as_array_array64(
             offset_pts);
         vector_array_release(offset_pts);
@@ -79,14 +79,14 @@ pub fn geom_d2_offset_points_10(
     p1: *const Vec<f64>,
     p2: *const Vec<f64>) -> *const RefCell<Vec<Vec<f64>>> {
 
-    if p1 != std::ptr::null() && p2 != std::ptr::null() {
+    if !p1.is_null() && !p2.is_null() {
         unsafe {
             let pts_res = geom::D2::offset_points(
                 offset, &*p1, &*p2);
             if let Ok(pts) = pts_res {
                 let result = vector_array_create(); 
-                for i in 0..pts.len() {
-                    let vec = vector_create_from_vec_ref(&pts[i]);
+                for pt in &pts {
+                    let vec = vector_create_from_vec_ref(pt);
                     vector_array_add_0(result, vec);
                     vector_release(vec);
                 }
@@ -114,7 +114,7 @@ pub fn geom_d2_offset_points_11(
 
     vector_release(vec_1);
     vector_release(vec_2);
-    return result;
+    result
 }
 
 /// move points toward cross line direction with offset
@@ -125,7 +125,7 @@ pub fn geom_d2_offset_points_12(
     p2: Float64Array) -> Option<js_sys::Array> {
 
     let offset_pts = geom_d2_offset_points_11(offset, p1, p2);
-    if offset_pts != std::ptr::null() {
+    if !offset_pts.is_null() {
         let result = vector_array_get_components_as_array_array64(
             offset_pts);
         vector_array_release(offset_pts);
@@ -141,7 +141,7 @@ pub fn geom_2d_offset_points_vec_00(
     offset: f64, 
     points: *const RefCell<Vec<Vec<f64>>>, 
     close: bool, tolerance:f64) -> *const RefCell<Vec<Vec<f64>>> {
-    if points != std::ptr::null() { 
+    if !points.is_null() { 
         unsafe {
             let offset_pts_ref = geom::D2::offset_points_vec_0(
                 offset, &(*points).borrow(), close, tolerance);
@@ -163,7 +163,7 @@ pub fn geom_2d_offset_points_vec_01(
     points: js_sys::Array, 
     close: bool, tolerance:f64) -> *const RefCell<Vec<Vec<f64>>> {
     let points_vec_array  = vector_array_from_js_array(points);
-    if points_vec_array != std::ptr::null() {
+    if !points_vec_array.is_null() {
         let result = geom_2d_offset_points_vec_00(
             offset, points_vec_array, close, tolerance);
         vector_array_release(points_vec_array);
@@ -181,7 +181,7 @@ pub fn geom_2d_offset_points_vec_02(
     close: bool, tolerance:f64) -> Option<js_sys::Array> {
     let offset_pts  = geom_2d_offset_points_vec_01(
         offset, points, close, tolerance);
-    if offset_pts != std::ptr::null() {
+    if !offset_pts.is_null() {
         let result = vector_array_get_components_as_array_array64(offset_pts);
         vector_array_release(offset_pts);
         result
@@ -197,7 +197,7 @@ pub fn geom_2d_offset_points_vec_10(
     offset: f64, 
     points: *const RefCell<Vec<Vec<f64>>>, 
     close: bool) -> *const RefCell<Vec<Vec<f64>>> {
-    if points != std::ptr::null() { 
+    if !points.is_null() { 
         unsafe {
             let offset_pts_ref = geom::D2::offset_points_vec(
                 offset, &(*points).borrow(), close);
@@ -219,7 +219,7 @@ pub fn geom_2d_offset_points_vec_11(
     points: js_sys::Array, 
     close: bool) -> *const RefCell<Vec<Vec<f64>>> {
     let points_vec_array  = vector_array_from_js_array(points);
-    if points_vec_array != std::ptr::null() {
+    if !points_vec_array.is_null() {
         let result = geom_2d_offset_points_vec_10(
             offset, points_vec_array, close);
         vector_array_release(points_vec_array);
@@ -237,7 +237,7 @@ pub fn geom_2d_offset_points_vec_12(
     close: bool) -> Option<js_sys::Array> {
     let offset_pts  = geom_2d_offset_points_vec_11(
         offset, points, close);
-    if offset_pts != std::ptr::null() {
+    if !offset_pts.is_null() {
         let result = vector_array_get_components_as_array_array64(offset_pts);
         vector_array_release(offset_pts);
         result

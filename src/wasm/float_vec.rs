@@ -35,7 +35,7 @@ pub fn float_vec_release(
 #[wasm_bindgen]
 pub fn float_vec_size(
     vec: *const Vec<OrderedFloat<f64>>) -> usize {
-    if std::ptr::null() != vec {
+    if !vec.is_null() {
         unsafe {
             (*vec).len()
         }
@@ -49,7 +49,7 @@ pub fn float_vec_size(
 pub fn float_vec_get(
     vec: *const Vec<OrderedFloat<f64>>,
     idx: usize) -> *const OrderedFloat<f64> {
-    if std::ptr::null() != vec {
+    if !vec.is_null() {
         unsafe {
             if idx < float_vec_size(vec) {
                 float_create_0(&(*vec)[idx])
