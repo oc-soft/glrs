@@ -1,24 +1,21 @@
+use crate::Distance;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
-use crate::Distance;
 
 /// construct distance
-pub fn distance_create_0(
-    dis: &Distance) -> *const Distance {
+pub fn distance_create_0(dis: &Distance) -> *const Distance {
     let distance_ref = Rc::new(*dis);
     Rc::into_raw(distance_ref)
 }
 
 /// construct distance
 #[wasm_bindgen]
-pub fn distance_create(
-    dis: f64) -> *const Distance {
+pub fn distance_create(dis: f64) -> *const Distance {
     distance_create_0(&Distance::new(&dis))
 }
 /// increment reference count
 #[wasm_bindgen]
-pub fn distance_retain(
-    distance: *const Distance) -> usize {
+pub fn distance_retain(distance: *const Distance) -> usize {
     if !distance.is_null() {
         unsafe {
             let distance_ref_0 = Rc::from_raw(distance);
@@ -35,8 +32,7 @@ pub fn distance_retain(
 
 /// decrement reference count
 #[wasm_bindgen]
-pub fn distance_release(
-    distance: *const Distance) -> usize {
+pub fn distance_release(distance: *const Distance) -> usize {
     if !distance.is_null() {
         unsafe {
             let distance_ref = Rc::from_raw(distance);
@@ -49,15 +45,11 @@ pub fn distance_release(
     }
 }
 
-
 /// get distance value
 #[wasm_bindgen]
-pub fn distance_get_value(
-    distance: *const Distance) -> Option<f64> {
+pub fn distance_get_value(distance: *const Distance) -> Option<f64> {
     if !distance.is_null() {
-        unsafe {
-            Some((*distance).get_distance())
-        }
+        unsafe { Some((*distance).get_distance()) }
     } else {
         None
     }
@@ -65,16 +57,12 @@ pub fn distance_get_value(
 
 /// get absolute distance value
 #[wasm_bindgen]
-pub fn distance_get_abs_value(
-    distance: *const Distance) -> Option<f64> {
+pub fn distance_get_abs_value(distance: *const Distance) -> Option<f64> {
     if !distance.is_null() {
-        unsafe {
-            Some((*distance).get_abs_distance())
-        }
+        unsafe { Some((*distance).get_abs_distance()) }
     } else {
         None
     }
 }
-
 
 // vi: se ts=4 sw=4 et:

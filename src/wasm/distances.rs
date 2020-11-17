@@ -1,14 +1,12 @@
+use super::distance::*;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
-use super::distance::*;
 
 use crate::Distance;
 
-
 /// increment reference count
 #[wasm_bindgen]
-pub fn distances_retain(
-    distances: *const Vec<Distance>) -> usize {
+pub fn distances_retain(distances: *const Vec<Distance>) -> usize {
     unsafe {
         let distances_ref_0 = Rc::from_raw(distances);
         let distances_ref_1 = distances_ref_0.clone();
@@ -21,8 +19,7 @@ pub fn distances_retain(
 
 /// decrement reference count
 #[wasm_bindgen]
-pub fn distances_release(
-    distances: *const Vec<Distance>) -> usize {
+pub fn distances_release(distances: *const Vec<Distance>) -> usize {
     unsafe {
         let distances_ref = Rc::from_raw(distances);
         let mut result = Rc::strong_count(&distances_ref);
@@ -31,15 +28,11 @@ pub fn distances_release(
     }
 }
 
-
 /// get count of distanceses
 #[wasm_bindgen]
-pub fn distances_size(
-    distances: *const Vec<Distance>) -> usize {
+pub fn distances_size(distances: *const Vec<Distance>) -> usize {
     if !distances.is_null() {
-        unsafe {
-            (*distances).len()
-        }
+        unsafe { (*distances).len() }
     } else {
         0 as usize
     }
@@ -49,7 +42,8 @@ pub fn distances_size(
 #[wasm_bindgen]
 pub fn distances_get(
     distances: *const Vec<Distance>,
-    idx: usize) -> *const Distance {
+    idx: usize,
+) -> *const Distance {
     if !distances.is_null() {
         unsafe {
             if idx < distances_size(distances) {

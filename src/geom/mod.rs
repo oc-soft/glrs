@@ -77,5 +77,4 @@ pub fn minus(v1: &[f64], v2: &[f64]) -> Result<Vec<f64>, GeomError> {
     }
 }
 
-
 // vi: se ts=4 sw=4 et:

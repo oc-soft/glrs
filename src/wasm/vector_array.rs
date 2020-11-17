@@ -1,10 +1,9 @@
-use std::rc::Rc;
-use std::cell::RefCell;
-use wasm_bindgen::prelude::*;
-use js_sys::Float64Array;
-use js_sys::Float32Array;
 use super::vector::*;
-
+use js_sys::Float32Array;
+use js_sys::Float64Array;
+use std::cell::RefCell;
+use std::rc::Rc;
+use wasm_bindgen::prelude::*;
 
 /// create vectors
 #[wasm_bindgen]
@@ -17,12 +16,13 @@ pub fn vector_array_create() -> *const RefCell<Vec<Vec<f64>>> {
 
 /// create vectors
 #[allow(dead_code)]
-pub fn vector_array_create_1(vec_array: &[Vec<f64>])
-    -> *const RefCell<Vec<Vec<f64>>> {
+pub fn vector_array_create_1(
+    vec_array: &[Vec<f64>],
+) -> *const RefCell<Vec<Vec<f64>>> {
     let mut result = vector_array_create();
 
     let mut state = true;
-    for elem in vec_array { 
+    for elem in vec_array {
         state = vector_array_add_00(result, elem);
         if !state {
             break;
@@ -35,12 +35,12 @@ pub fn vector_array_create_1(vec_array: &[Vec<f64>])
     result
 }
 
-
 /// convet vector array from java script array
 #[wasm_bindgen]
 #[allow(dead_code)]
-pub fn vector_array_from_js_array(array: js_sys::Array) 
-    -> *const RefCell<Vec<Vec<f64>>> {
+pub fn vector_array_from_js_array(
+    array: js_sys::Array,
+) -> *const RefCell<Vec<Vec<f64>>> {
     let mut vec_array = Vec::new();
     let mut state;
     state = true;
@@ -48,15 +48,15 @@ pub fn vector_array_from_js_array(array: js_sys::Array)
         let item = array.get(i);
         state = js_sys::Array::is_array(&item);
         if state {
-            let array_1 = js_sys::Array::from(&item); 
+            let array_1 = js_sys::Array::from(&item);
             let mut vec = Vec::new();
             for j in 0..array_1.length() {
                 let elem = array_1.get(j);
-                 if let Some(val) = elem.as_f64() {
+                if let Some(val) = elem.as_f64() {
                     vec.push(val);
                 } else {
-                    state = false; 
-                } 
+                    state = false;
+                }
                 if !state {
                     break;
                 }
@@ -126,17 +126,12 @@ pub fn vector_array_dimension(
     }
 }
 
-
-/// get size 
+/// get size
 #[wasm_bindgen]
 #[allow(dead_code)]
-pub fn vector_array_size(
-    v: *const RefCell<Vec<Vec<f64>>>,
-) -> Option<usize> {
+pub fn vector_array_size(v: *const RefCell<Vec<Vec<f64>>>) -> Option<usize> {
     if !v.is_null() {
-        unsafe {
-            Some((*v).borrow().len())
-        }
+        unsafe { Some((*v).borrow().len()) }
     } else {
         None
     }
@@ -146,7 +141,8 @@ pub fn vector_array_size(
 #[allow(dead_code)]
 pub fn vector_array_get_element_as_array64(
     v: *const RefCell<Vec<Vec<f64>>>,
-    i: usize) -> Option<Float64Array> {
+    i: usize,
+) -> Option<Float64Array> {
     if !v.is_null() {
         if i < vector_array_size(v).unwrap() {
             unsafe {
@@ -164,7 +160,8 @@ pub fn vector_array_get_element_as_array64(
 #[allow(dead_code)]
 pub fn vector_array_get_element_as_array32(
     v: *const RefCell<Vec<Vec<f64>>>,
-    i: usize) -> Option<Float32Array> {
+    i: usize,
+) -> Option<Float32Array> {
     if !v.is_null() {
         if i < vector_array_size(v).unwrap() {
             unsafe {
@@ -193,7 +190,7 @@ pub fn vector_array_add_00(
                 vec_size_ref = None;
             }
         } else {
-            vec_size_ref = Some(v.len()) 
+            vec_size_ref = Some(v.len())
         }
         if let Some(vec_size) = vec_size_ref {
             let mut vec = Vec::with_capacity(vec_size);
@@ -220,9 +217,7 @@ pub fn vector_array_add_0(
     v: *const Vec<f64>,
 ) -> bool {
     if !va.is_null() && !v.is_null() {
-        unsafe {
-            vector_array_add_00(va, &*v)
-        }
+        unsafe { vector_array_add_00(va, &*v) }
     } else {
         false
     }
@@ -245,11 +240,12 @@ pub fn vector_array_add_1(
     }
 }
 
-/// get every components as javasript array 
+/// get every components as javasript array
 #[wasm_bindgen]
 #[allow(dead_code)]
 pub fn vector_array_get_components_as_array_array64(
-    va: *const RefCell<Vec<Vec<f64>>>) -> Option<js_sys::Array> {
+    va: *const RefCell<Vec<Vec<f64>>>,
+) -> Option<js_sys::Array> {
     if !va.is_null() {
         let size = vector_array_size(va).unwrap();
         let array = js_sys::Array::new_with_length(size as u32);
@@ -262,28 +258,23 @@ pub fn vector_array_get_components_as_array_array64(
         None
     }
 }
- 
 
-/// get every components as javasript array 
+/// get every components as javasript array
 #[wasm_bindgen]
 pub fn vector_array_get_components_as_array_array32(
-    va: *const RefCell<Vec<Vec<f64>>>) -> Option<js_sys::Array> {
+    va: *const RefCell<Vec<Vec<f64>>>,
+) -> Option<js_sys::Array> {
     if !va.is_null() {
         let size = vector_array_size(va).unwrap();
         let array = js_sys::Array::new_with_length(size as u32);
         for i in 0..size {
             let array64 = vector_array_get_element_as_array32(va, i).unwrap();
-            array.set(
-                i as u32, 
-                JsValue::from(array64));
+            array.set(i as u32, JsValue::from(array64));
         }
         Some(array)
     } else {
         None
     }
 }
-
-
-
 
 // vi: se ts=4 sw=4 et:

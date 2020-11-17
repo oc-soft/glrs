@@ -1,21 +1,20 @@
-use std::rc::Rc;
-use std::cell::RefCell;
-use std::collections::BTreeMap;
-use ordered_float::OrderedFloat;
-use wasm_bindgen::prelude::*;
-use wasm_bindgen::JsValue;
-use js_sys::Float64Array;
-use crate::Plane;
-use crate::Distance;
 use super::distance_indices::*;
 use super::float_indices::*;
 use super::vector::*;
 use super::vector_array::*;
+use crate::Distance;
+use crate::Plane;
+use js_sys::Float64Array;
+use ordered_float::OrderedFloat;
+use std::cell::RefCell;
+use std::collections::BTreeMap;
+use std::rc::Rc;
+use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsValue;
 
 /// instanciate plane
 #[wasm_bindgen]
-pub fn plane_create_0(n: *const Vec<f64>, c: *const Vec<f64>)
-    -> *const Plane {
+pub fn plane_create_0(n: *const Vec<f64>, c: *const Vec<f64>) -> *const Plane {
     if !n.is_null() && !c.is_null() {
         unsafe {
             match Plane::create(&*n, &*c) {
@@ -28,8 +27,10 @@ pub fn plane_create_0(n: *const Vec<f64>, c: *const Vec<f64>)
     }
 }
 #[wasm_bindgen]
-pub fn plane_create_with_2d_0(p1: *const Vec<f64>, p2: *const Vec<f64>)
-    -> *const Plane {
+pub fn plane_create_with_2d_0(
+    p1: *const Vec<f64>,
+    p2: *const Vec<f64>,
+) -> *const Plane {
     if !p1.is_null() && !p2.is_null() {
         unsafe {
             match Plane::create_with_2d(&*p1, &*p2) {
@@ -42,12 +43,10 @@ pub fn plane_create_with_2d_0(p1: *const Vec<f64>, p2: *const Vec<f64>)
     }
 }
 
-
 /// create plane instance
 #[wasm_bindgen]
-pub fn plane_create(n: Float64Array, c: Float64Array)
-    -> *const Plane {
-    let n_vec = vector_create(n); 
+pub fn plane_create(n: Float64Array, c: Float64Array) -> *const Plane {
+    let n_vec = vector_create(n);
     let c_vec = vector_create(c);
     let result = plane_create_0(n_vec, c_vec);
     vector_release(n_vec);
@@ -57,9 +56,11 @@ pub fn plane_create(n: Float64Array, c: Float64Array)
 
 /// create plane instance
 #[wasm_bindgen]
-pub fn plane_create_with_2d(p1: Float64Array, p2: Float64Array)
-    -> *const Plane {
-    let p1_vec = vector_create(p1); 
+pub fn plane_create_with_2d(
+    p1: Float64Array,
+    p2: Float64Array,
+) -> *const Plane {
+    let p1_vec = vector_create(p1);
     let p2_vec = vector_create(p2);
     let result = plane_create_with_2d_0(p1_vec, p2_vec);
     vector_release(p1_vec);
@@ -100,12 +101,9 @@ pub fn plane_release(p: *const Plane) -> usize {
 
 /// get dimension
 #[wasm_bindgen]
-pub fn plane_get_dimension(
-    p: *const Plane) -> Option<usize> {
+pub fn plane_get_dimension(p: *const Plane) -> Option<usize> {
     if !p.is_null() {
-        unsafe {
-            Some((*p).get_dimension())
-        }
+        unsafe { Some((*p).get_dimension()) }
     } else {
         None
     }
@@ -113,14 +111,12 @@ pub fn plane_get_dimension(
 
 /// calcurate distance
 #[wasm_bindgen]
-pub fn plane_distance_0(
-    p: *const Plane,
-    v: *const Vec<f64>) -> Option<f64> {
+pub fn plane_distance_0(p: *const Plane, v: *const Vec<f64>) -> Option<f64> {
     if !p.is_null() && !v.is_null() {
         unsafe {
             match (*p).distance(&(*v)) {
                 Ok(dis) => Some(dis),
-                Err(_) => None
+                Err(_) => None,
             }
         }
     } else {
@@ -128,14 +124,11 @@ pub fn plane_distance_0(
     }
 }
 
-
 /// calcurate distance
 #[wasm_bindgen]
-pub fn plane_distance(
-    p: *const Plane,
-    v: Float64Array) -> Option<f64> {
+pub fn plane_distance(p: *const Plane, v: Float64Array) -> Option<f64> {
     if !p.is_null() {
-        let vec = vector_create(v);  
+        let vec = vector_create(v);
         let result = plane_distance_0(p, vec);
         vector_release(vec);
         result
@@ -148,12 +141,13 @@ pub fn plane_distance(
 #[wasm_bindgen]
 pub fn plane_project_0(
     p: *const Plane,
-    v: *const Vec<f64>) -> Option<Vec<f64>> {
+    v: *const Vec<f64>,
+) -> Option<Vec<f64>> {
     if !p.is_null() && !v.is_null() {
         unsafe {
             match (*p).project(&(*v)) {
                 Ok(proj_pt) => Some(proj_pt),
-                Err(_) => None
+                Err(_) => None,
             }
         }
     } else {
@@ -161,21 +155,19 @@ pub fn plane_project_0(
     }
 }
 
-
 /// project the point on plane
 #[wasm_bindgen]
 pub fn plane_project(
     p: *const Plane,
-    v: Float64Array) -> Option<Float64Array> {
+    v: Float64Array,
+) -> Option<Float64Array> {
     if !p.is_null() {
-        let vec = vector_create(v);  
+        let vec = vector_create(v);
         let res = plane_project_0(p, vec);
         vector_release(vec);
         match res {
-            Some(vec_res) => {
-                Some(vector_convert_to_array64_from_64(&vec_res))
-            },
-            _ => None
+            Some(vec_res) => Some(vector_convert_to_array64_from_64(&vec_res)),
+            _ => None,
         }
     } else {
         None
@@ -186,8 +178,8 @@ pub fn plane_project(
 #[wasm_bindgen]
 pub fn plane_sort_points_0_i(
     p: *const Plane,
-    va: *const RefCell<Vec<Vec<f64>>>)
-    -> *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> {
+    va: *const RefCell<Vec<Vec<f64>>>,
+) -> *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> {
     if !p.is_null() && !va.is_null() {
         unsafe {
             let sorted_indices = (*p).sort_points_0(&(*va).borrow());
@@ -202,8 +194,8 @@ pub fn plane_sort_points_0_i(
 #[wasm_bindgen]
 pub fn plane_sort_points_0(
     p: *const Plane,
-    point_container: JsValue)
-    -> *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> {
+    point_container: JsValue,
+) -> *const BTreeMap<OrderedFloat<f64>, Rc<RefCell<Vec<usize>>>> {
     if !p.is_null() {
         if point_container.is_object() {
             let array_js = js_sys::Array::from(&point_container);
@@ -217,12 +209,12 @@ pub fn plane_sort_points_0(
                     for j in 0..va_js.length() {
                         match va_js.get(j).as_f64() {
                             Some(val) => vec.push(val),
-                            None => break
+                            None => break,
                         }
                     }
                     vector_array_add_0(vec_array, &vec);
                 } else {
-                    vector_array_add_0(vec_array, &Vec::new());  
+                    vector_array_add_0(vec_array, &Vec::new());
                 }
             }
             let result = plane_sort_points_0_i(p, vec_array);
@@ -236,13 +228,12 @@ pub fn plane_sort_points_0(
     }
 }
 
-
 /// sort points
 #[wasm_bindgen]
 pub fn plane_sort_points_1_i(
     p: *const Plane,
-    va: *const RefCell<Vec<Vec<f64>>>)
-    -> *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
+    va: *const RefCell<Vec<Vec<f64>>>,
+) -> *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
     if !p.is_null() && !va.is_null() {
         unsafe {
             let sorted_indices = (*p).sort_points_1(&(*va).borrow());
@@ -257,8 +248,8 @@ pub fn plane_sort_points_1_i(
 #[wasm_bindgen]
 pub fn plane_sort_points_1(
     p: *const Plane,
-    point_container: JsValue)
-    -> *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
+    point_container: JsValue,
+) -> *const BTreeMap<Distance, Rc<RefCell<Vec<usize>>>> {
     if !p.is_null() {
         if point_container.is_object() {
             let array_js = js_sys::Array::from(&point_container);
@@ -272,12 +263,12 @@ pub fn plane_sort_points_1(
                     for j in 0..va_js.length() {
                         match va_js.get(j).as_f64() {
                             Some(val) => vec.push(val),
-                            None => break
+                            None => break,
                         }
                     }
                     vector_array_add_0(vec_array, &vec);
                 } else {
-                    vector_array_add_0(vec_array, &Vec::new());  
+                    vector_array_add_0(vec_array, &Vec::new());
                 }
             }
             let result = plane_sort_points_1_i(p, vec_array);

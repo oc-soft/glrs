@@ -1,15 +1,13 @@
 use std::rc::Rc;
 
-use wasm_bindgen::prelude::*;
-use js_sys::Float64Array;
 use super::vector::*;
-
+use js_sys::Float64Array;
+use wasm_bindgen::prelude::*;
 
 use crate::Segment;
 
 /// construct segment
-fn segment_create_i_0(
-    seg: Segment) -> *const Segment {
+fn segment_create_i_0(seg: Segment) -> *const Segment {
     let seg_ref = Rc::new(seg);
     Rc::into_raw(seg_ref)
 }
@@ -31,7 +29,6 @@ pub fn segment_retain(seg: *const Segment) -> usize {
     }
 }
 
-
 /// decrement reference count
 #[wasm_bindgen]
 pub fn segment_release(seg: *const Segment) -> usize {
@@ -47,19 +44,17 @@ pub fn segment_release(seg: *const Segment) -> usize {
     }
 }
 
-
 /// create segment
 #[wasm_bindgen]
 pub fn segment_create_00(
-    d: *const Vec<f64>, 
-    c: *const Vec<f64>, 
+    d: *const Vec<f64>,
+    c: *const Vec<f64>,
     t0: f64,
-    t1: f64) -> *const Segment {
-
-    if !d.is_null() && !c.is_null()  {
+    t1: f64,
+) -> *const Segment {
+    if !d.is_null() && !c.is_null() {
         unsafe {
-            let seg_ref = Segment::create_0(
-                &*d, &*c, &[t0, t1]);
+            let seg_ref = Segment::create_0(&*d, &*c, &[t0, t1]);
             if let Ok(seg) = seg_ref {
                 segment_create_i_0(seg)
             } else {
@@ -71,15 +66,14 @@ pub fn segment_create_00(
     }
 }
 
-
 /// create segment instance
 #[wasm_bindgen]
 pub fn segment_create_01(
-    d: Float64Array, 
-    c: Float64Array, 
+    d: Float64Array,
+    c: Float64Array,
     t0: f64,
-    t1: f64) -> *const Segment {
-
+    t1: f64,
+) -> *const Segment {
     let d_vec = vector_create(d);
     let c_vec = vector_create(c);
 
@@ -93,9 +87,9 @@ pub fn segment_create_01(
 /// create segment
 #[wasm_bindgen]
 pub fn segment_create_10(
-    p1: *const Vec<f64>, 
-    p2: *const Vec<f64>) -> *const Segment {
-
+    p1: *const Vec<f64>,
+    p2: *const Vec<f64>,
+) -> *const Segment {
     if !p1.is_null() && !p2.is_null() {
         unsafe {
             let seg_ref = Segment::create_1(&*p1, &*p2);
@@ -110,13 +104,12 @@ pub fn segment_create_10(
     }
 }
 
-
 /// create segment instance
 #[wasm_bindgen]
 pub fn segment_create_11(
-    p1: Float64Array, 
-    p2: Float64Array) -> *const Segment {
-
+    p1: Float64Array,
+    p2: Float64Array,
+) -> *const Segment {
     let p1_vec = vector_create(p1);
     let p2_vec = vector_create(p2);
 
@@ -131,21 +124,18 @@ pub fn segment_create_11(
 #[wasm_bindgen]
 pub fn segment_p1_0(seg: *const Segment) -> *const Vec<f64> {
     if !seg.is_null() {
-        unsafe {
-            vector_create_from_vec((*seg).p1())
-        }
+        unsafe { vector_create_from_vec((*seg).p1()) }
     } else {
-        std::ptr::null() 
+        std::ptr::null()
     }
 }
-
 
 /// p1 vector
 #[wasm_bindgen]
 pub fn segment_p1(seg: *const Segment) -> Option<Float64Array> {
     if !seg.is_null() {
         let vec = segment_p1_0(seg);
-        let result = vector_get_components(vec); 
+        let result = vector_get_components(vec);
         vector_release(vec);
         result
     } else {
@@ -157,21 +147,18 @@ pub fn segment_p1(seg: *const Segment) -> Option<Float64Array> {
 #[wasm_bindgen]
 pub fn segment_p2_0(seg: *const Segment) -> *const Vec<f64> {
     if !seg.is_null() {
-        unsafe {
-            vector_create_from_vec((*seg).p2())
-        }
+        unsafe { vector_create_from_vec((*seg).p2()) }
     } else {
-        std::ptr::null() 
+        std::ptr::null()
     }
 }
-
 
 /// p2 vector
 #[wasm_bindgen]
 pub fn segment_p2(seg: *const Segment) -> Option<Float64Array> {
     if !seg.is_null() {
         let vec = segment_p2_0(seg);
-        let result = vector_get_components(vec); 
+        let result = vector_get_components(vec);
         vector_release(vec);
         result
     } else {
@@ -183,21 +170,18 @@ pub fn segment_p2(seg: *const Segment) -> Option<Float64Array> {
 #[wasm_bindgen]
 pub fn segment_direction_0(seg: *const Segment) -> *const Vec<f64> {
     if !seg.is_null() {
-        unsafe {
-            vector_create_from_vec_ref((*seg).direction())
-        }
+        unsafe { vector_create_from_vec_ref((*seg).direction()) }
     } else {
-        std::ptr::null() 
+        std::ptr::null()
     }
 }
-
 
 /// direction
 #[wasm_bindgen]
 pub fn segment_direction(seg: *const Segment) -> Option<Float64Array> {
     if !seg.is_null() {
         let vec = segment_direction_0(seg);
-        let result = vector_get_components(vec); 
+        let result = vector_get_components(vec);
         vector_release(vec);
         result
     } else {
@@ -205,24 +189,25 @@ pub fn segment_direction(seg: *const Segment) -> Option<Float64Array> {
     }
 }
 
-/// point on line 
+/// point on line
 #[wasm_bindgen]
 pub fn segment_point_on_t_0(seg: *const Segment, t: f64) -> *const Vec<f64> {
     if !seg.is_null() {
-        unsafe {
-            vector_create_from_vec((*seg).point_on_t(t))
-        }
+        unsafe { vector_create_from_vec((*seg).point_on_t(t)) }
     } else {
         std::ptr::null()
     }
 }
 
-/// point on line 
+/// point on line
 #[wasm_bindgen]
-pub fn segment_point_on_t(seg: *const Segment, t: f64) -> Option<Float64Array> {
+pub fn segment_point_on_t(
+    seg: *const Segment,
+    t: f64,
+) -> Option<Float64Array> {
     if !seg.is_null() {
         let vec = segment_point_on_t_0(seg, t);
-        let result = vector_get_components(vec); 
+        let result = vector_get_components(vec);
         vector_release(vec);
         result
     } else {
@@ -236,7 +221,7 @@ pub fn segment_get_parameter_range_0(seg: *const Segment) -> *const Vec<f64> {
     if !seg.is_null() {
         unsafe {
             let range = (*seg).t();
-            vector_create_from_vec(vec!(range[0], range[1])) 
+            vector_create_from_vec(vec![range[0], range[1]])
         }
     } else {
         std::ptr::null()
@@ -245,8 +230,9 @@ pub fn segment_get_parameter_range_0(seg: *const Segment) -> *const Vec<f64> {
 
 /// parameter range
 #[wasm_bindgen]
-pub fn segment_get_parameter_range(seg: *const Segment)
-    -> Option<Float64Array> {
+pub fn segment_get_parameter_range(
+    seg: *const Segment,
+) -> Option<Float64Array> {
     if !seg.is_null() {
         let vec = segment_get_parameter_range_0(seg);
         let result = vector_get_components(vec);
@@ -261,14 +247,11 @@ pub fn segment_get_parameter_range(seg: *const Segment)
 #[wasm_bindgen]
 pub fn segment_point_on_line_0(seg: *const Segment) -> *const Vec<f64> {
     if !seg.is_null() {
-        unsafe {
-            vector_create_from_vec_ref((*seg).point_on_line())
-        }
+        unsafe { vector_create_from_vec_ref((*seg).point_on_line()) }
     } else {
-        std::ptr::null() 
+        std::ptr::null()
     }
 }
-
 
 /// get point at t
 #[wasm_bindgen]
@@ -279,41 +262,41 @@ pub fn segment_point_on_line(seg: *const Segment) -> Option<Float64Array> {
         vector_release(vec);
         result
     } else {
-        None 
+        None
     }
 }
 
 /// calculate cross point parameter as line 2d
 #[wasm_bindgen]
 pub fn segment_cross_point_parameter_2d_00(
-    seg_1 : *const Segment, 
-    seg_2 : *const Segment, 
-    tolerance:f64)
-    -> *const Vec<f64> {
+    seg_1: *const Segment,
+    seg_2: *const Segment,
+    tolerance: f64,
+) -> *const Vec<f64> {
     if !seg_1.is_null() && !seg_2.is_null() {
         let param_ref;
         unsafe {
-            param_ref = (*seg_1).cross_point_parameter_2d_0(
-                &*seg_2, tolerance);
+            param_ref =
+                (*seg_1).cross_point_parameter_2d_0(&*seg_2, tolerance);
         }
         if let Some(param) = param_ref {
-            vector_create_from_vec(vec!(param[0], param[1]))
+            vector_create_from_vec(vec![param[0], param[1]])
         } else {
             std::ptr::null()
         }
     } else {
         std::ptr::null()
     }
-} 
+}
 
 /// calculate cross point parameter as line 2d
 #[wasm_bindgen]
 pub fn segment_cross_point_parameter_2d_01(
-    seg_1 : *const Segment, 
-    seg_2 : *const Segment, 
-    tolerance:f64)
-    -> Option<Float64Array> {
-    let vec= segment_cross_point_parameter_2d_00(seg_1, seg_2, tolerance);
+    seg_1: *const Segment,
+    seg_2: *const Segment,
+    tolerance: f64,
+) -> Option<Float64Array> {
+    let vec = segment_cross_point_parameter_2d_00(seg_1, seg_2, tolerance);
 
     if !vec.is_null() {
         let result = vector_get_components(vec);
@@ -327,31 +310,31 @@ pub fn segment_cross_point_parameter_2d_01(
 /// calculate cross point parameter as line 2d
 #[wasm_bindgen]
 pub fn segment_cross_point_parameter_2d_10(
-    seg_1 : *const Segment, 
-    seg_2 : *const Segment)
-    -> *const Vec<f64> {
+    seg_1: *const Segment,
+    seg_2: *const Segment,
+) -> *const Vec<f64> {
     if !seg_1.is_null() && !seg_2.is_null() {
         let param_ref;
         unsafe {
             param_ref = (*seg_1).cross_point_parameter_2d(&*seg_2);
         }
         if let Some(param) = param_ref {
-            vector_create_from_vec(vec!(param[0], param[1]))
+            vector_create_from_vec(vec![param[0], param[1]])
         } else {
             std::ptr::null()
         }
     } else {
         std::ptr::null()
     }
-} 
+}
 
 /// calculate cross point parameter as line 2d
 #[wasm_bindgen]
 pub fn segment_cross_point_parameter_2d_11(
-    seg_1 : *const Segment, 
-    seg_2 : *const Segment)
-    -> Option<Float64Array> {
-    let vec= segment_cross_point_parameter_2d_10(seg_1, seg_2);
+    seg_1: *const Segment,
+    seg_2: *const Segment,
+) -> Option<Float64Array> {
+    let vec = segment_cross_point_parameter_2d_10(seg_1, seg_2);
 
     if !vec.is_null() {
         let result = vector_get_components(vec);
@@ -366,10 +349,10 @@ pub fn segment_cross_point_parameter_2d_11(
 /// you will get none if cross point paremeter is out of segment range.
 #[wasm_bindgen]
 pub fn segment_cross_point_parameter_2d_exact_00(
-    seg_1: *const Segment, 
+    seg_1: *const Segment,
     seg_2: *const Segment,
-    tolerance: f64)
-    -> *const Vec<f64> {
+    tolerance: f64,
+) -> *const Vec<f64> {
     if !seg_1.is_null() && !seg_2.is_null() {
         let param_ref;
         unsafe {
@@ -377,7 +360,7 @@ pub fn segment_cross_point_parameter_2d_exact_00(
                 (*seg_1).cross_point_parameter_2d_exact_0(&*seg_2, tolerance);
         }
         if let Some(param) = param_ref {
-            vector_create_from_vec(vec!(param[0], param[1]))
+            vector_create_from_vec(vec![param[0], param[1]])
         } else {
             std::ptr::null()
         }
@@ -390,12 +373,12 @@ pub fn segment_cross_point_parameter_2d_exact_00(
 /// you will get none if cross point paremeter is out of segment range.
 #[wasm_bindgen]
 pub fn segment_cross_point_parameter_2d_exact_01(
-    seg_1: *const Segment, 
+    seg_1: *const Segment,
     seg_2: *const Segment,
-    tolerance: f64)
-    -> Option<Float64Array> {
-    let vec = segment_cross_point_parameter_2d_exact_00(
-        seg_1, seg_2, tolerance);
+    tolerance: f64,
+) -> Option<Float64Array> {
+    let vec =
+        segment_cross_point_parameter_2d_exact_00(seg_1, seg_2, tolerance);
     if !vec.is_null() {
         let result = vector_get_components(vec);
         vector_release(vec);
@@ -404,21 +387,21 @@ pub fn segment_cross_point_parameter_2d_exact_01(
         None
     }
 }
- 
+
 /// calculate cross point parameter as line 2d
 /// you will get none if cross point paremeter is out of segment range.
 #[wasm_bindgen]
 pub fn segment_cross_point_parameter_2d_exact_10(
     seg_1: *const Segment,
-    seg_2: *const Segment) -> *const Vec<f64> {
-
+    seg_2: *const Segment,
+) -> *const Vec<f64> {
     if !seg_1.is_null() && !seg_2.is_null() {
         let param_ref;
         unsafe {
             param_ref = (*seg_1).cross_point_parameter_2d_exact(&*seg_2);
         }
         if let Some(param) = param_ref {
-            vector_create_from_vec(vec!(param[0], param[1]))
+            vector_create_from_vec(vec![param[0], param[1]])
         } else {
             std::ptr::null()
         }
@@ -426,14 +409,14 @@ pub fn segment_cross_point_parameter_2d_exact_10(
         std::ptr::null()
     }
 }
- 
+
 /// calculate cross point parameter as line 2d
 /// you will get none if cross point paremeter is out of segment range.
 #[wasm_bindgen]
 pub fn segment_cross_point_parameter_2d_exact_11(
     seg_1: *const Segment,
-    seg_2: *const Segment) -> Option<Float64Array> {
-
+    seg_2: *const Segment,
+) -> Option<Float64Array> {
     let vec = segment_cross_point_parameter_2d_exact_10(seg_1, seg_2);
     if !vec.is_null() {
         let result = vector_get_components(vec);
@@ -444,4 +427,3 @@ pub fn segment_cross_point_parameter_2d_exact_11(
     }
 }
 // vi: se ts=4 sw=4 et:
-

@@ -1,11 +1,11 @@
 use crate::geom;
 use crate::Distance;
 use geom::GeomError;
+use ordered_float::OrderedFloat;
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::BTreeMap;
 use std::rc::Rc;
-use ordered_float::OrderedFloat;
 
 /// I represent plane with normal vector and the point on the plane
 pub struct Plane {
@@ -39,21 +39,20 @@ impl Plane {
         }
     }
     /// create line
-    pub fn create_with_2d(p1: &[f64], p2: &[f64])
-        -> Result<Plane, GeomError> {
+    pub fn create_with_2d(p1: &[f64], p2: &[f64]) -> Result<Plane, GeomError> {
         if p1.len() > 1 && p2.len() > 1 {
             match geom::minus(p2, p1) {
                 Ok(v) => {
-                    let v2d = vec!(v[0], v[1]);
-                    Self::create(&[- v2d[1], v2d[0]], p1) 
-                },
-                _ => Err(GeomError)
+                    let v2d = vec![v[0], v[1]];
+                    Self::create(&[-v2d[1], v2d[0]], p1)
+                }
+                _ => Err(GeomError),
             }
         } else {
-            Err(GeomError)    
+            Err(GeomError)
         }
     }
- 
+
     /// get dimension
     pub fn get_dimension(&self) -> usize {
         self.n.len()
@@ -73,13 +72,13 @@ impl Plane {
 
     /// project a point to this plane
     pub fn project(&self, p: &[f64]) -> Result<Vec<f64>, GeomError> {
-         match self.distance(p) {
+        match self.distance(p) {
             Ok(dis) => {
                 let translate = geom::scale(-dis, &self.n);
                 let result = geom::plus(&translate, &p).unwrap();
                 Ok(result)
-            },
-            Err(err) => Err(err)
+            }
+            Err(err) => Err(err),
         }
     }
 

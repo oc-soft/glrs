@@ -1,21 +1,18 @@
-use std::rc::Rc;
-use js_sys::Float64Array;
 use js_sys::Float32Array;
+use js_sys::Float64Array;
+use std::rc::Rc;
 use wasm_bindgen::prelude::*;
-
 
 /// create vector
 #[allow(dead_code)]
-pub fn vector_create_from_vec(
-    v: Vec<f64>) -> *const Vec<f64> {
+pub fn vector_create_from_vec(v: Vec<f64>) -> *const Vec<f64> {
     let result = Rc::new(v);
     Rc::into_raw(result)
 }
 
 /// create vector
 #[allow(dead_code)]
-pub fn vector_create_from_vec_ref(
-    v: &[f64]) -> *const Vec<f64> {
+pub fn vector_create_from_vec_ref(v: &[f64]) -> *const Vec<f64> {
     let mut vec = Vec::with_capacity(v.len());
     for elem in v {
         vec.push(*elem);
@@ -23,12 +20,10 @@ pub fn vector_create_from_vec_ref(
     vector_create_from_vec(vec)
 }
 
-
 /// convert Vec<f64> from Float32Array
 #[allow(dead_code)]
-pub fn vector_convert_to_vec64_from_32(
-    components: Float32Array) -> Vec<f64> {
-    let mut result  = Vec::with_capacity(components.length() as usize);
+pub fn vector_convert_to_vec64_from_32(components: Float32Array) -> Vec<f64> {
+    let mut result = Vec::with_capacity(components.length() as usize);
     for i in 0..components.length() {
         result.push(components.get_index(i) as f64);
     }
@@ -37,9 +32,8 @@ pub fn vector_convert_to_vec64_from_32(
 
 /// convert Float64Array from Vec<f64>
 #[allow(dead_code)]
-pub fn vector_convert_to_array64_from_64(
-    components: &[f64]) -> Float64Array {
-    let result  = Float64Array::new_with_length(components.len() as u32);
+pub fn vector_convert_to_array64_from_64(components: &[f64]) -> Float64Array {
+    let result = Float64Array::new_with_length(components.len() as u32);
     for (i, elem) in components.iter().enumerate() {
         result.set_index(i as u32, *elem);
     }
@@ -48,15 +42,13 @@ pub fn vector_convert_to_array64_from_64(
 
 /// convert Float64Array from Vec<f64>
 #[allow(dead_code)]
-pub fn vector_convert_to_array32_from_64(
-    components: &[f64]) -> Float32Array {
-    let result  = Float32Array::new_with_length(components.len() as u32);
+pub fn vector_convert_to_array32_from_64(components: &[f64]) -> Float32Array {
+    let result = Float32Array::new_with_length(components.len() as u32);
     for (i, elem) in components.iter().enumerate() {
         result.set_index(i as u32, *elem as f32);
     }
     result
 }
-
 
 /// create vector
 #[wasm_bindgen]
@@ -98,7 +90,6 @@ pub fn vector_get_components_32(v: *const Vec<f64>) -> Option<Float32Array> {
         None
     }
 }
-
 
 /// get a component in vector
 #[wasm_bindgen]

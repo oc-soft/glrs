@@ -89,7 +89,6 @@ impl MatrixI {
         }
     }
 
-
     /// multiply
     pub fn multiply(
         &mut self,
