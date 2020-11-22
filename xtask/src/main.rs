@@ -154,9 +154,6 @@ fn print_usage(program: &str, opts: Options) {
     print!("Verb:\n");
     print!("{}\n", verb_usage());
 
-    //print!("{}\n", opts.usage_with_format(|opt_line| {
-    //    opt_line.collect::<Vec<String>>().join("\n")
-    //}));
 }
 
 

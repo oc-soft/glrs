@@ -7,10 +7,6 @@ edition = "2018"
 [dependencies]
 toml = "0.5"
 getopts = "0.2"
-wasm-bindgen-cli = "0.2.68"
-
-[patch.crates-io]
-wasm-bindgen-cli = { git = 'https://github.com/toshiyuki-rs/wasm-bindgen.git' }
 
 
 # vi: se ts=2 sw=2 et:
