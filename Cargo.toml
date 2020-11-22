@@ -1,6 +1,6 @@
 [package]
 name = "glrs"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Toshiyuki Ogawa <toshi@oc-soft.net>"]
 edition = "2018"
 
@@ -8,9 +8,19 @@ edition = "2018"
 
 [dependencies]
 readonly="0.1"
-wasm-bindgen = { git = "https://github.com/toshiyuki-rs/wasm-bindgen.git" }
-js-sys = { git = "https://github.com/toshiyuki-rs/wasm-bindgen.git"  }
+js-sys = "0.3.40"
 ordered-float = "1.0"
+wasm-bindgen = "0.2.68"
+
+[build-dependencies]
+wasm-bindgen = "0.2.68"
+
+[patch.crates-io]
+js-sys = { git = "https://github.com/toshiyuki-rs/wasm-bindgen.git"  }
+wasm-bindgen = { git = 'https://github.com/toshiyuki-rs/wasm-bindgen.git' }
 
 [lib]
 crate-type = ["cdylib", "rlib"]
+
+[workspace]
+members = ["xtask"]
