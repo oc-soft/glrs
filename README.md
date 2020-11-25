@@ -159,8 +159,9 @@ requirements. If I load wasmpack separately, I had to write type-script
 declaration by hand. If I use transpiled type-script declations, I had no
 choice but to load one javascript embedding web-assebmly.
 
-I customized wasm-bindgen tool to generate type-script declaration for my
-requirement. The wasm-bindgen-cli has new option web-bundler. The option 
+I customized [wasm-bindgen tool](https://github.com/toshiyuki-rs/wasm-bindgen)
+to generate type-script declaration for my requirement.
+The wasm-bindgen-cli has new option web-bundler. The option 
 generates type-script declaration to use compiled web-assembly which is fetched
 lately.
 
