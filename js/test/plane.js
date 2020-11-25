@@ -1,6 +1,5 @@
 
 const assert = require('assert');
-const glrs = require('glrs');
 
 /**
  * test plane object
@@ -16,7 +15,7 @@ class Plane {
   /**
    * test instanciate
    */
-  instanciate0() {
+  instanciate0(glrs) {
     const p = glrs.plane_create([], []);
     assert.equal(p, 0);
   }
@@ -24,7 +23,7 @@ class Plane {
   /**
    * test instaciate
    */
-  instanciate1() {
+  instanciate1(glrs) {
     const p = glrs.plane_create([0, 0, 1.0], [2, 3, 1]);
     assert(p != 0);
 
@@ -34,7 +33,7 @@ class Plane {
   /**
    * test distance
    */
-  distance0() {
+  distance0(glrs) {
     const p = glrs.plane_create([0, 0, 1.0], [2, 3, 1]);
     assert(p != 0);
 
@@ -47,7 +46,7 @@ class Plane {
   /**
    * test to sort points
    */
-  sort0() {
+  sort0(glrs) {
     const p = glrs.plane_create([0, 0, 1.0], [2, 3, 1]);
     assert(p != 0);
 
@@ -88,7 +87,7 @@ class Plane {
   /**
    * test to sort points
    */
-  sort1() {
+  sort1(glrs) {
     const p = glrs.plane_create([0, 0, 1.0], [2, 3, 1]);
     assert(p != 0);
 
@@ -130,7 +129,7 @@ class Plane {
   /**
    * test to sort points
    */
-  sort2() {
+  sort2(glrs) {
     const p = glrs.plane_create([0, 0, 1.0], [2, 3, 1]);
     assert(p != 0);
 
@@ -172,13 +171,13 @@ class Plane {
   /**
    * run test
    */
-  run() {
-    this.instanciate0();
-    this.instanciate1();
-    this.distance0();
-    this.sort0();
-    this.sort1();
-    this.sort2();
+  run(glrs) {
+    this.instanciate0(glrs);
+    this.instanciate1(glrs);
+    this.distance0(glrs);
+    this.sort0(glrs);
+    this.sort1(glrs);
+    this.sort2(glrs);
  }
 }
 

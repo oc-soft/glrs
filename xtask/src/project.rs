@@ -26,6 +26,7 @@ pub(crate) fn root_dir() -> path::PathBuf {
 }
 
 /// get distribut directory
+#[allow(dead_code)]
 pub(crate) fn dist_dir() -> path::PathBuf {
     let mut pb = root_dir();
     pb.push("target");
@@ -55,6 +56,13 @@ pub(crate) fn js_project_dir() -> path::PathBuf {
     pb.push("target");
     pb.push("js");
     pb
+}
+
+/// javascript template directory
+pub(crate) fn js_template_dir() -> path::PathBuf {
+    let mut result = root_dir();
+    result.push("js");
+    result 
 }
 
 // vi: se ts=4 sw=4 et:

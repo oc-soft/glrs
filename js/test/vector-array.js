@@ -1,5 +1,4 @@
 
-const glrs = require('glrs');
 const assert = require('assert');
 
 /// vector array test
@@ -11,7 +10,7 @@ class VectorArray {
 
 
   /// test to access item
-  accessItems0() {
+  accessItems0(glrs) {
     const va = glrs.vector_array_create();
 
     assert.equal(undefined, glrs.vector_array_dimension(va));
@@ -28,8 +27,8 @@ class VectorArray {
     assert.equal(0, glrs.vector_array_release(va));
   }
 
-  run() {
-    this.accessItems0(); 
+  run(glrs) {
+    this.accessItems0(glrs); 
   }
 }
 

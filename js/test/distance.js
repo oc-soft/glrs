@@ -1,5 +1,4 @@
 const assert = require('assert');
-const glrs = require('glrs');
 
 /**
  * distance test
@@ -15,7 +14,7 @@ class Distance {
   /**
    * instanciation test
    */
-  instanciate() {
+  instanciate(glrs) {
     const dis = glrs.distance_create(3.1); 
 
     assert.equal(0, glrs.distance_release(dis));
@@ -24,7 +23,7 @@ class Distance {
   /**
    * value test
    */
-  getValue0() {
+  getValue0(glrs) {
     const dis = glrs.distance_create(3.1); 
     assert.equal(3.1, glrs.distance_get_value(dis));
     assert.equal(0, glrs.distance_release(dis));
@@ -33,7 +32,7 @@ class Distance {
   /**
    * value test
    */
-  getValue1() {
+  getValue1(glrs) {
     const dis = glrs.distance_create(-3.1); 
     assert.equal(3.1, glrs.distance_get_abs_value(dis));
     assert.equal(0, glrs.distance_release(dis));
@@ -43,10 +42,10 @@ class Distance {
   /**
    * run test
    */
-  run() {
-    this.instanciate();
-    this.getValue0();
-    this.getValue1();
+  run(glrs) {
+    this.instanciate(glrs);
+    this.getValue0(glrs);
+    this.getValue1(glrs);
   }
 }
 

@@ -21,6 +21,8 @@ pub fn matrix_create_with_components_row_order(
     let result = Rc::new(RefCell::new(mat));
     Rc::into_raw(result)
 }
+
+/// create matrix
 #[wasm_bindgen]
 pub fn matrix_create_with_components_col_order(
     components: Clamped<Vec<f64>>,
@@ -224,7 +226,7 @@ pub fn matrix_inverse(mat: *const RefCell<Matrix>) -> *const RefCell<Matrix> {
     }
 }
 
-/// calculate inverse matrix
+/// multiply each compoents of matrix with scale
 #[wasm_bindgen]
 pub fn matrix_scale_mut(mat: *const RefCell<Matrix>, scale: f64) -> bool {
     if !mat.is_null() {
@@ -237,7 +239,7 @@ pub fn matrix_scale_mut(mat: *const RefCell<Matrix>, scale: f64) -> bool {
     }
 }
 
-/// calculate inverse matrix
+/// multiply each components of matrix with scale
 #[wasm_bindgen]
 pub fn matrix_scale(
     mat: *const RefCell<Matrix>,

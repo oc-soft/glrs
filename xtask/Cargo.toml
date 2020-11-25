@@ -6,6 +6,7 @@ edition = "2018"
 
 [dependencies]
 toml = "0.5"
+json = "0.12"
 
 
 # vi: se ts=2 sw=2 et:

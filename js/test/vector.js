@@ -1,5 +1,4 @@
 const assert = require('assert');
-const glrs = require('glrs');
 
 /**
  * vector test
@@ -17,7 +16,7 @@ class Vector {
   /**
    * item storage
    */
-  itemStorage() {
+  itemStorage(glrs) {
     let vec = glrs.vector_create(new Float32Array([1.0, 2.0, 3.0]));
     assert.equal(2.0, glrs.vector_get_component(vec, 1));
     glrs.vector_release(vec);
@@ -26,7 +25,7 @@ class Vector {
   /**
    * reference count test
    */
-  refCount0() {
+  refCount0(glrs) {
     let vec = glrs.vector_create(new Float32Array([1.0, 2.0, 3.0]));
 
     let refCount = glrs.vector_retain(vec);
@@ -41,9 +40,9 @@ class Vector {
   /**
    * run test
    */
-  run() {
-    this.itemStorage();
-    this.refCount0();
+  run(glrs) {
+    this.itemStorage(glrs);
+    this.refCount0(glrs);
   }
 }
 

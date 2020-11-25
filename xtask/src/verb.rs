@@ -9,6 +9,10 @@ pub(crate) enum Verb {
     Install,
     /// Build package
     Build,
+    /// setup js package
+    SetupJs,
+    /// test library in javascript environment.
+    TestJs,
 }
 
 impl Verb {
@@ -42,6 +46,8 @@ fn to_string(v: &Verb) -> String {
         Verb::Help => String::from("help"),
         Verb::Install => String::from("install"),
         Verb::Build => String::from("build"),
+        Verb::SetupJs => String::from("setup-js"),
+        Verb::TestJs => String::from("test-js"),
     }
 }
 
@@ -54,6 +60,10 @@ fn to_description(v: &Verb) -> String {
             "install some tools to build this projects"),
         Verb::Build => String::from(
             "build package."),
+        Verb::SetupJs => String::from(
+            "setup javascript packages."),
+        Verb::TestJs => String::from(
+            "Test the library in javascript environment"),
     }
 }
 
@@ -63,21 +73,31 @@ fn from(s: &str) -> Result<Verb, error::Error> {
         "help" => Ok(Verb::Help),
         "install" => Ok(Verb::Install),
         "build" => Ok(Verb::Build),
-        _ => Err(error::Error::InvalidVerb)
+        "setup-js" => Ok(Verb::SetupJs),
+        "test-js" => Ok(Verb::TestJs),
+        _ => Err(error::Error::InvalidVerb),
     }
 }
 
+/// You get dependencies for a verb.
+fn depends(v: &Verb) -> Vec<Verb> {
+    let mut result = Vec::new();
+    depends_0(v, &mut result);
+    result
+}
 
 /// You would get dependencies for a verb.
-fn depends(v: &Verb) -> Vec<Verb> {
-    let mut result: Vec<Verb> = Vec::new();
+fn depends_0(v: &Verb, deps: &mut Vec<Verb>) {
     match v {
         Verb::Build => {
-            result.push(Verb::Install)
+            deps.push(Verb::Install);
+            deps.push(Verb::SetupJs);
+        },
+        Verb::TestJs => {
+            depends_0(&Verb::Build, deps);
         },
         _ => (),
     }
-    result
 }
 
 

@@ -9,6 +9,8 @@ mod install;
 mod tools;
 mod verb;
 mod error;
+mod js;
+mod package;
 
 use verb::Verb;
 
@@ -59,7 +61,8 @@ fn verb_item_usage(v: &Verb) -> String {
 /// verb usage
 fn verb_usage() -> String {
     let mut str_vec: Vec<String> = Vec::new();
-    for v in vec![Verb::Help, Verb::Install, Verb::Build] {
+    for v in vec![Verb::Help, Verb::Install, Verb::Build,
+        Verb::SetupJs, Verb::TestJs] {
         str_vec.push(verb_item_usage(&v))
     }
     str_vec.join("\n")
@@ -79,6 +82,8 @@ fn do_task(verb: &Verb) {
         Verb::Help => print_usage(),
         Verb::Install => tools::install(),
         Verb::Build => build::build(),
+        Verb::SetupJs => js::setup(),
+        Verb::TestJs => js::test(),
     }
  }
 
