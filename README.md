@@ -1,11 +1,11 @@
-# Matrix library for web assembly
+# Matrix library for web-assembly
 
-This is matrix library for web assembly. I designed this libray for web gl, but
+This is matrix library for web-assembly. I designed this libray for web gl, but
 you may use general purpose program.
 
 ## How to use this in javascript
 
-Matrix procedures are in web assebly. You have to load the assembly first.
+Matrix procedures are in web-assembly. You have to load the assembly first.
 
 ``` javascript
 // load glrs.js 
@@ -139,29 +139,29 @@ vec1.forEach((compo, idx) => {
 matrix.forEach( mt => glrs.matrix_release(mt) )
 ```
 
-## Using webassembly by rust
+## Using web-assembly by rust
 
 This library is made from rust language. You might this library as rust's 
-crate too. I customized some crates to compile this webassembly.
+crate too. I customized some crates to compile this web-assembly.
 
 1. I did not use wasmpack.
-2. I used xtask to build webassembly.
+2. I used xtask to build web-assembly.
 
 ### Build without wasm-pack.
 
-I had some requirements to use webassebly.
+I had some requirements to use web-assembly.
 
-1. load webassebly separately from javascript at http page. 
+1. load web-assembly separately from javascript at http page. 
 2. have well transpiled type-script declaration.
 
 I tried to run wasm-pack with web option first, I could not get either
 requirements. If I load wasmpack separately, I had to write type-script
 declaration by hand. If I use transpiled type-script declations, I had no
-choice but to load one javascript embedding webassebmly.
+choice but to load one javascript embedding web-assebmly.
 
 I customized wasm-bindgen tool to generate type-script declaration for my
 requirement. The wasm-bindgen-cli has new option web-bundler. The option 
-generates type-script declaration to use compiled webassembly which is fetched
+generates type-script declaration to use compiled web-assembly which is fetched
 lately.
 
 I would like to use the customized wasm-bindgen tool  with wasm-pack, but
@@ -170,7 +170,7 @@ I gave up to use wasm-pack for my purpose.
 
 ### Using xtask
 
-I learned that wasm-bindgen has to generate webassembly after build the 
+I learned that wasm-bindgen has to generate web-assembly after build the 
 wasm32-unknown-unknown target library. I would like to run some commands after
 I ran `cargo build --target wasm32-unknown-unknown`. I found [this discussion](https://github.com/rust-lang/cargo/issues/545). I realized that I can not have
 post build script officially. In this discussion, [xtask suggention](https://github.com/matklad/cargo-xtask)
