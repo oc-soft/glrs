@@ -175,7 +175,7 @@ I learned that wasm-bindgen has to generate web-assembly after build the
 wasm32-unknown-unknown target library. I would like to run some commands after
 I ran `cargo build --target wasm32-unknown-unknown`. I found [this discussion](https://github.com/rust-lang/cargo/issues/545). I realized that I can not have
 post build script officially. In this discussion, [xtask suggention](https://github.com/matklad/cargo-xtask)
-is nice for me following reasons. 
+is nice for me in following reasons. 
 
 1. You don't have to learn any other syntax but rust to build your project.
 2. You can use all of resources of rust natural way.
