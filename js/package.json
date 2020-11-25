@@ -2,7 +2,7 @@
   "name": "@oc-soft/glrs",
   "version": "0.1.0",
   "description": "web gl gemoetric procedure collection.",
-  "main": "index.js",
+  "main": "glrs.js",
   "scripts": {
     "test": "cd test && node index.js"
   },
@@ -15,7 +15,5 @@
   ],
   "author": "Toshiyuki Ogawa",
   "license": "MIT",
-  "dependencies": {
-    "lodash": "^4.17.20"
-  }
+  "dependencies": {}
 }
