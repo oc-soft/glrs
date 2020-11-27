@@ -13,7 +13,16 @@ pub(crate) enum Verb {
     SetupJs,
     /// test library in javascript environment.
     TestJs,
+    /// clean js package
+    CleanJs,
+    /// publish javascript library
+    PublishJs,
+    /// create readme in root directory
+    ReadMe,
+    /// create readme in javascript publish directory
+    ReadMeJs,
 }
+
 
 impl Verb {
 
@@ -47,7 +56,11 @@ fn to_string(v: &Verb) -> String {
         Verb::Install => String::from("install"),
         Verb::Build => String::from("build"),
         Verb::SetupJs => String::from("setup-js"),
+        Verb::PublishJs => String::from("publish-js"),
         Verb::TestJs => String::from("test-js"),
+        Verb::CleanJs => String::from("clean-js"),
+        Verb::ReadMe => String::from("readme"),
+        Verb::ReadMeJs => String::from("readme-js"),
     }
 }
 
@@ -60,10 +73,18 @@ fn to_description(v: &Verb) -> String {
             "install some tools to build this projects"),
         Verb::Build => String::from(
             "build package."),
+        Verb::PublishJs => String::from(
+            "publish javascript library"),
         Verb::SetupJs => String::from(
             "setup javascript packages."),
         Verb::TestJs => String::from(
             "Test the library in javascript environment"),
+        Verb::CleanJs => String::from(
+            "Clean javascript packages."),
+        Verb::ReadMe => String::from(
+            "Create README.md in root directory."),
+        Verb::ReadMeJs => String::from(
+            "Create README.md in javascript publish directory"),
     }
 }
 
@@ -74,7 +95,11 @@ fn from(s: &str) -> Result<Verb, error::Error> {
         "install" => Ok(Verb::Install),
         "build" => Ok(Verb::Build),
         "setup-js" => Ok(Verb::SetupJs),
+        "publish-js" => Ok(Verb::PublishJs),
         "test-js" => Ok(Verb::TestJs),
+        "clean-js" => Ok(Verb::CleanJs),
+        "readme" => Ok(Verb::ReadMe),
+        "readme-js" => Ok(Verb::ReadMeJs),
         _ => Err(error::Error::InvalidVerb),
     }
 }
@@ -95,7 +120,14 @@ fn depends_0(v: &Verb, deps: &mut Vec<Verb>) {
         },
         Verb::TestJs => {
             depends_0(&Verb::Build, deps);
+            deps.push(Verb::Build);
         },
+        Verb::PublishJs => {
+            depends_0(&Verb::TestJs, deps);
+            deps.push(Verb::TestJs);
+            deps.push(Verb::Build);
+            deps.push(Verb::ReadMeJs);
+        }
         _ => (),
     }
 }

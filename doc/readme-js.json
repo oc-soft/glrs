@@ -1,0 +1,22 @@
+{
+  "document": "README.md",
+  "toc": [
+    {
+      "title": "# Matrix library for web-assembly",
+      "contents": "agenda.txt"
+    },
+    {
+      "title": "## How to use this in javascript",
+      "contents": "js-usage.txt"
+    },
+    {
+      "title": "## Matrix operation in javascript",
+      "contents": "matrix-op-example.txt"
+    },
+    {
+      "title": "## Matrix vector opeation in javascript",
+      "contents": "vector-op-example.txt"
+    }
+  ],
+  "__comments" : "/* vi: se ts=2 sw=2 et: */"
+}

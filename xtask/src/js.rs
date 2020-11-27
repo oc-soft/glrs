@@ -13,6 +13,26 @@ pub(crate) fn setup() {
     create_package_json();
 }
 
+/// clean js package 
+pub(crate) fn clean() {
+    let dst_dir = project::js_project_dir();
+    let _ = fs::remove_dir_all(dst_dir); 
+}
+
+/// publish 
+pub(crate) fn publish() {
+    let mut cmd = process::Command::new("npm");
+    cmd.arg("publish"); 
+
+    cmd.stdout(process::Stdio::inherit())
+        .stderr(process::Stdio::inherit());
+    cmd.current_dir(project::js_project_dir());
+
+    cmd.output().expect("You could not publish javascript library."); 
+
+}
+
+
 /// test javascript module
 pub(crate) fn test() {
     let mut cmd = process::Command::new("npm");
@@ -22,7 +42,7 @@ pub(crate) fn test() {
     let mut test_dst_dir = project::js_project_dir();
     test_dst_dir.push("test");
     cmd.current_dir(test_dst_dir); 
-    cmd.output().expect("You could not launch javascritp test script.");
+    cmd.output().expect("You could not launch javascript test script.");
 }
 
 /// copy test code into package
@@ -47,6 +67,26 @@ pub(crate) fn copy_test_to_package() {
     }
 }
 
+/// copy files in js template directory to target js directory
+fn copy_root_files_to_pacakge()
+{
+    let src_dir = project::js_template_dir();
+    let dst_dir = project::js_project_dir();
+    if let Ok(()) =  fs::create_dir_all(dst_dir.clone()) {
+        if let Ok(entries) = fs::read_dir(src_dir) {
+            for dir_en_res in entries {
+                if let Ok(dir_en) = dir_en_res { 
+                    if dir_en.path().is_file() {
+                        let mut dst_file = dst_dir.clone();
+                        dst_file.push(dir_en.path().file_name().unwrap());
+                        let _ = fs::copy(dir_en.path(), dst_file);
+                    }
+                }
+            }
+        }
+    }
+}
+ 
 /// create package json from template and cargo toml
 fn create_package_json() {
     let mut src_pkg_json_path = project::js_template_dir();

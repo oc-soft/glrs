@@ -11,6 +11,7 @@ mod verb;
 mod error;
 mod js;
 mod package;
+mod doc;
 
 use verb::Verb;
 
@@ -61,8 +62,9 @@ fn verb_item_usage(v: &Verb) -> String {
 /// verb usage
 fn verb_usage() -> String {
     let mut str_vec: Vec<String> = Vec::new();
-    for v in vec![Verb::Help, Verb::Install, Verb::Build,
-        Verb::SetupJs, Verb::TestJs] {
+    for v in vec![Verb::Help, Verb::Install, Verb::Build, Verb::PublishJs,
+        Verb::SetupJs, Verb::TestJs, Verb::CleanJs,
+        Verb::ReadMe, Verb::ReadMeJs] {
         str_vec.push(verb_item_usage(&v))
     }
     str_vec.join("\n")
@@ -83,7 +85,11 @@ fn do_task(verb: &Verb) {
         Verb::Install => tools::install(),
         Verb::Build => build::build(),
         Verb::SetupJs => js::setup(),
+        Verb::PublishJs => js::publish(),
         Verb::TestJs => js::test(),
+        Verb::CleanJs => js::clean(),
+        Verb::ReadMe => doc::create_readme_root(),
+        Verb::ReadMeJs => doc::create_readme_js(),
     }
  }
 

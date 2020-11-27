@@ -1,0 +1,24 @@
+Matrix procedures are in web-assembly. You have to load the assembly first.
+
+``` javascript
+// load glrs.js 
+const glrs = require('glrs')
+
+let wasmMod = undefined;
+
+if (typeof window === 'undefined') {
+  // You have to compile if you use this library in nodejs.
+  const path = require('path')
+  const fs = require('fs')
+  const wasmPath = path.join(
+      path.dirname(require.resolve('glrs')), 'glrs_bg.wasm') 
+  wasmMod = WebAssembly.compile(fs.readFileSync(wasmPath))
+}
+
+(async () => {
+  const glrsInterface = await glrs.init(wasmMod)
+  // You can use glrs matrix library
+  
+})
+```
+

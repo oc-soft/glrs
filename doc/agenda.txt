@@ -1,0 +1,2 @@
+This is matrix library for web-assembly. I designed this libray for web-gl, but
+you may use general purpose program.

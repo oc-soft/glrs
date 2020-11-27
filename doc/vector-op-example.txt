@@ -1,0 +1,36 @@
+You can operate vector with matrix.
+
+``` javascript
+// the handle to matrix object
+const matrix = [0, 0]
+
+// create 3x3 matrix
+matrix[0] = glrs.matrix_create_with_components_row_order(
+  [ 7, 2, 1,
+    0, 3, -1,
+    -3, 4, -2 ])
+// get inverse of matrix
+matrix[1] = glrs.matrix_inverse(matrix[0])
+
+// apply matrix to vector
+const vec0 = glrs.matrix_apply_r_64(matrix[0], [2, 3, 4])
+const vec1 = glrs.matrix_apply_r_64(matrix[1], vec0)
+
+// you expect these components. 
+const expectedVec0 = [ 24, 5, -2 ]
+
+
+vec0.forEach((compo, idx) => {
+  // some components do not equal exactly for floating operation error.
+  assert.ok(0.0001 > Math.abs((expectedVec0[idx] - compo)))
+})
+
+const expectedVec1 = [ 2, 3, 4 ]
+
+vec1.forEach((compo, idx) => {
+  assert.ok(0.0001 > Math.abs((expectedVec1[idx] - compo)))
+})
+
+// release matrix instance from heap
+matrix.forEach( mt => glrs.matrix_release(mt) )
+```

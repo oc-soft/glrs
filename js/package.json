@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "description": "web gl gemoetric procedure collection.",
   "main": "glrs.js",
+  "homepage": "https://github.com/oc-soft/glrs#matrix-library-for-web-assembly",
+  "bugs": {
+    "url": "https://github.com/oc-soft/glrs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oc-soft/glrs.git"
+  },
   "scripts": {
     "test": "cd test && node index.js"
   },

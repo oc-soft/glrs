@@ -65,4 +65,11 @@ pub(crate) fn js_template_dir() -> path::PathBuf {
     result 
 }
 
+/// document source directory
+pub(crate) fn doc_src_dir() -> path::PathBuf {
+    let mut result = root_dir();
+    result.push("doc");
+    result
+}
+
 // vi: se ts=4 sw=4 et:

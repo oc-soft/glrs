@@ -1,0 +1,5 @@
+This library is made from rust language. You might this library as rust's 
+crate too. I customized some crates to compile this web-assembly.
+
+1. I did not use wasmpack.
+2. I used xtask to build web-assembly.
