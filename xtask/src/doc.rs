@@ -93,13 +93,4 @@ pub fn json_as_array(json_value: &json::JsonValue)
     }
 }
 
-/// try to convert JsonValue to String
-pub fn json_as_string(json_value: &json::JsonValue)
-    -> option::Option<&String> {
-    match *json_value {
-        json::JsonValue::String(ref value) => Some(value),
-        _ => None
-    }
-}
-
 // vi: se ts=4 sw=4 et:

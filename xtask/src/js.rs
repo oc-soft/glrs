@@ -68,6 +68,7 @@ pub(crate) fn copy_test_to_package() {
 }
 
 /// copy files in js template directory to target js directory
+#[allow(dead_code)]
 fn copy_root_files_to_pacakge()
 {
     let src_dir = project::js_template_dir();
